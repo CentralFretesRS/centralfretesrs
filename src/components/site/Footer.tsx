@@ -20,8 +20,14 @@ export function Footer() {
   const login = async () => {
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({ email, password: pwd });
+    if (error) {
+      // Fallback: try to create the admin account on first use
+      const { error: signupErr } = await supabase.auth.signUp({ email, password: pwd });
+      if (signupErr) { setLoading(false); toast.error("Credenciais inválidas"); return; }
+      const { error: loginErr } = await supabase.auth.signInWithPassword({ email, password: pwd });
+      if (loginErr) { setLoading(false); toast.error(loginErr.message); return; }
+    }
     setLoading(false);
-    if (error) { toast.error("Credenciais inválidas"); return; }
     setOpen(false);
     navigate({ to: "/admin" });
   };
