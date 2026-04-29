@@ -4,6 +4,7 @@ import { Footer } from "@/components/site/Footer";
 import { WhatsAppFloat } from "@/components/site/WhatsAppFloat";
 import { QuoteStepper } from "@/components/site/QuoteStepper";
 import { HowItWorks, Services } from "@/components/site/Sections";
+import { ThemedSections } from "@/components/site/ThemedSections";
 import { Zap } from "lucide-react";
 import { COMPANY_TAGLINE } from "@/lib/config";
 
@@ -41,9 +42,10 @@ function Index() {
                   {COMPANY_TAGLINE}. Preencha 4 etapas rápidas e receba seu orçamento direto no WhatsApp. Atendemos toda região metropolitana, litoral e interior do RS.
                 </p>
                 <div className="flex flex-wrap gap-3">
-                  <div className="px-3 py-2 rounded-lg bg-card border-2 border-[#FF8C00] text-xs"><span className="text-primary font-bold">+10 anos</span> no mercado</div>
-                  <div className="px-3 py-2 rounded-lg bg-card border border-border text-xs"><span className="text-primary font-bold">100%</span> WhatsApp</div>
-                  <div className="px-3 py-2 rounded-lg bg-card border border-border text-xs"><span className="text-primary font-bold">RS</span> inteiro</div>
+                  <a href="#dez-anos" className="px-3 py-2 rounded-lg bg-card border-2 border-[#FF8C00] text-xs hover:brightness-125 transition-all"><span className="text-primary font-bold">+10 anos</span> no mercado</a>
+                  <a href="#whatsapp" className="px-3 py-2 rounded-lg bg-card border border-border text-xs hover:border-primary transition-all"><span className="text-primary font-bold">100%</span> WhatsApp</a>
+                  <a href="#rs-inteiro" className="px-3 py-2 rounded-lg bg-card border border-border text-xs hover:border-primary transition-all"><span className="text-primary font-bold">RS</span> inteiro</a>
+                  <a href="#fretes-compartilhados" className="px-3 py-2 rounded-lg bg-card border border-border text-xs hover:border-primary transition-all"><span className="text-primary font-bold">Fretes</span> Compartilhados</a>
                 </div>
               </div>
               <div>
@@ -54,6 +56,7 @@ function Index() {
         </section>
 
         <HowItWorks />
+        <ThemedSections />
         <Services />
       </main>
       <Footer />
