@@ -17,7 +17,7 @@ type Quote = {
   origin_city: string; origin_neighborhood: string | null; origin_address: string | null;
   destination_city: string; destination_neighborhood: string | null; destination_address: string | null;
   item_category: string; item_quantity: string | null; item_notes: string | null;
-  desired_date: string | null; period: string | null; needs_helpers: boolean;
+  desired_date: string | null; period: string | null; needs_helpers: boolean | null;
   technical_details: string | null; status: string; created_at: string;
 };
 
