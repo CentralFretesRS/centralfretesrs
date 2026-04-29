@@ -14,7 +14,128 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      financials: {
+        Row: {
+          amount: number
+          client_name: string
+          commission_pct: number
+          created_at: string
+          destination: string | null
+          driver: string | null
+          id: string
+          origin: string | null
+          payment_method: string
+          payment_status: string
+          quote_id: string | null
+          realized_at: string
+          updated_at: string
+        }
+        Insert: {
+          amount?: number
+          client_name: string
+          commission_pct?: number
+          created_at?: string
+          destination?: string | null
+          driver?: string | null
+          id?: string
+          origin?: string | null
+          payment_method?: string
+          payment_status?: string
+          quote_id?: string | null
+          realized_at?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          client_name?: string
+          commission_pct?: number
+          created_at?: string
+          destination?: string | null
+          driver?: string | null
+          id?: string
+          origin?: string | null
+          payment_method?: string
+          payment_status?: string
+          quote_id?: string | null
+          realized_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "financials_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: false
+            referencedRelation: "quotes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quotes: {
+        Row: {
+          client_name: string
+          created_at: string
+          desired_date: string | null
+          destination_address: string | null
+          destination_city: string
+          destination_neighborhood: string | null
+          id: string
+          item_category: string
+          item_notes: string | null
+          item_quantity: string | null
+          needs_helpers: boolean | null
+          origin_address: string | null
+          origin_city: string
+          origin_neighborhood: string | null
+          period: string | null
+          status: string
+          technical_details: string | null
+          updated_at: string
+          whatsapp: string
+        }
+        Insert: {
+          client_name: string
+          created_at?: string
+          desired_date?: string | null
+          destination_address?: string | null
+          destination_city: string
+          destination_neighborhood?: string | null
+          id?: string
+          item_category: string
+          item_notes?: string | null
+          item_quantity?: string | null
+          needs_helpers?: boolean | null
+          origin_address?: string | null
+          origin_city: string
+          origin_neighborhood?: string | null
+          period?: string | null
+          status?: string
+          technical_details?: string | null
+          updated_at?: string
+          whatsapp: string
+        }
+        Update: {
+          client_name?: string
+          created_at?: string
+          desired_date?: string | null
+          destination_address?: string | null
+          destination_city?: string
+          destination_neighborhood?: string | null
+          id?: string
+          item_category?: string
+          item_notes?: string | null
+          item_quantity?: string | null
+          needs_helpers?: boolean | null
+          origin_address?: string | null
+          origin_city?: string
+          origin_neighborhood?: string | null
+          period?: string | null
+          status?: string
+          technical_details?: string | null
+          updated_at?: string
+          whatsapp?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
