@@ -41,7 +41,7 @@ function Index() {
                   {COMPANY_TAGLINE}. Preencha 4 etapas rápidas e receba seu orçamento direto no WhatsApp. Atendemos toda região metropolitana, litoral e interior do RS.
                 </p>
                 <div className="flex flex-wrap gap-3">
-                  <div className="px-3 py-2 rounded-lg bg-card border border-border text-xs"><span className="text-primary font-bold">+5 anos</span> no mercado</div>
+                  <div className="px-3 py-2 rounded-lg bg-card border-2 border-[#FF8C00] text-xs"><span className="text-primary font-bold">+10 anos</span> no mercado</div>
                   <div className="px-3 py-2 rounded-lg bg-card border border-border text-xs"><span className="text-primary font-bold">100%</span> WhatsApp</div>
                   <div className="px-3 py-2 rounded-lg bg-card border border-border text-xs"><span className="text-primary font-bold">RS</span> inteiro</div>
                 </div>
