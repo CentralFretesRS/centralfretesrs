@@ -164,7 +164,7 @@ export function QuoteStepper() {
               { k: "dest", title: "Destino", color: "primary" as const,
                 cityKey: "destCity", nKey: "destNeighborhood", aKey: "destAddress" },
             ].map((b) => (
-              <div key={b.k} className="rounded-xl bg-muted/40 border border-border p-4 space-y-3">
+              <div key={b.k} className="stepper-block stepper-field rounded-xl bg-muted/40 p-4 space-y-3">
                 <div className="font-display text-sm tracking-widest text-primary">{b.title.toUpperCase()}</div>
                 <div>
                   <Label className="text-xs">Cidade *</Label>
