@@ -103,6 +103,7 @@
     background-image: var(--gradient-dark);
     background-attachment: fixed;
     min-height: 100vh;
+    font-size: 1.2em;
   }
   h1, h2, h3, h4, .font-display {
     font-family: var(--font-display);
@@ -122,4 +123,13 @@
   }
   .shadow-glow { box-shadow: var(--shadow-glow); }
   .shadow-card { box-shadow: var(--shadow-card); }
+  /* Stepper field borders — sempre visíveis */
+  .stepper-block { border-color: #FF8C00 !important; border-width: 2px; }
+  .stepper-field input,
+  .stepper-field textarea,
+  .stepper-field [role="combobox"],
+  .stepper-field button[role="combobox"] {
+    border-color: #FFFFFF !important;
+    border-width: 1.5px !important;
+  }
 }
