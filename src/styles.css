@@ -130,7 +130,35 @@
   .stepper-field textarea,
   .stepper-field [role="combobox"],
   .stepper-field button[role="combobox"] {
-    border-color: #FFFFFF !important;
+    border-color: #FF8C00 !important;
+    border-width: 1.5px !important;
+  }
+}
+
+@layer base {
+  /* Acessibilidade idosos: aumentar 20% fontes pequenas */
+  .text-xs { font-size: 0.9rem !important; line-height: 1.35rem !important; }
+  .text-sm { font-size: 1.05rem !important; line-height: 1.5rem !important; }
+
+  /* Botões e badges — borda laranja visível */
+  button:not([data-no-orange]):not([role="combobox"]):not(.no-orange-border),
+  [role="button"]:not([data-no-orange]),
+  .badge,
+  [class*="badge"] {
+    border: 2px solid #FF8C00 !important;
+  }
+
+  /* Cards e seções com contorno laranja */
+  [class*="rounded-2xl"][class*="bg-card"],
+  [class*="rounded-xl"][class*="bg-card"],
+  .card,
+  section > div[class*="rounded"] {
+    border: 2px solid #FF8C00 !important;
+  }
+
+  /* Inputs/selects/textarea globais */
+  input, textarea, select, [role="combobox"] {
+    border-color: #FF8C00 !important;
     border-width: 1.5px !important;
   }
 }
