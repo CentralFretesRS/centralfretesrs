@@ -179,11 +179,20 @@
   .items-grid {
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
+    width: 100% !important;
+    min-width: 0 !important;
   }
   @media (min-width: 768px) {
     .items-grid {
       grid-template-columns: 1fr 1fr 1fr !important;
     }
+  }
+  .items-grid .item-card {
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+  .items-tabs {
+    max-width: 100% !important;
   }
 
   /* Inputs/selects/textarea globais */
