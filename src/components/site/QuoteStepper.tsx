@@ -245,6 +245,7 @@ export function QuoteStepper() {
   const [step, setStep] = useState(0);
   const [data, setData] = useState<FormState>(initial);
   const [activeTab, setActiveTab] = useState(TABS[0].id);
+  const [datePickerOpen, setDatePickerOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
 
@@ -565,19 +566,32 @@ export function QuoteStepper() {
           <div className="grid sm:grid-cols-2 gap-5">
             <div>
               <Label className="text-xs">Data desejada *</Label>
-              <Popover>
+              <Popover open={datePickerOpen} onOpenChange={setDatePickerOpen}>
                 <PopoverTrigger asChild>
                   <Button variant="outline" className={cn("w-full mt-1 justify-start", !data.date && "text-muted-foreground")}>
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {data.date ? format(data.date, "PPP", { locale: ptBR }) : "Escolha a data"}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar mode="single" selected={data.date} onSelect={(d) => update("date", d)}
+                <PopoverContent className="w-[min(92vw,340px)] p-0" align="start" sideOffset={6}>
+                  <Calendar mode="single" selected={data.date} onSelect={(d) => {
+                    if (!d || d.getDay() === 0) return;
+                    update("date", d);
+                    setDatePickerOpen(false);
+                  }}
                     disabled={(d) => d < new Date(new Date().setHours(0,0,0,0)) || d.getDay() === 0}
                     initialFocus className="p-3 pointer-events-auto" />
                 </PopoverContent>
               </Popover>
+              {data.date && (
+                <Button
+                  type="button"
+                  className="mt-3 w-full bg-gradient-brand text-background font-bold shadow-glow"
+                  onClick={() => setStep(3)}
+                >
+                  Confirmar Data
+                </Button>
+              )}
             </div>
             <div>
               <Label className="text-xs">Período *</Label>
