@@ -318,10 +318,10 @@ export function QuoteStepper() {
         whatsapp: data.whatsapp,
         origin_city: data.originCity,
         origin_neighborhood: data.originNeighborhood || null,
-        origin_address: data.originAddress || null,
+        origin_address: null,
         destination_city: data.destCity,
         destination_neighborhood: data.destNeighborhood || null,
-        destination_address: data.destAddress || null,
+        destination_address: null,
         item_category: firstCat,
         item_quantity: String(itemsCount),
         item_notes: itemsSummary + (data.itemsOtherText ? ` | Outros: ${data.itemsOtherText}` : ""),
@@ -339,8 +339,8 @@ export function QuoteStepper() {
       const msg = encodeURIComponent(
         `*🚚 NOVA COTAÇÃO — Central Fretes RS*\n\n` +
         `*👤 Cliente:* ${data.name}\n*📱 WhatsApp:* ${data.whatsapp}\n\n` +
-        `*📍 Origem:* ${data.originCity}${data.originNeighborhood ? " — " + data.originNeighborhood : ""}${data.originAddress ? "\n   " + data.originAddress : ""}\n` +
-        `*🎯 Destino:* ${data.destCity}${data.destNeighborhood ? " — " + data.destNeighborhood : ""}${data.destAddress ? "\n   " + data.destAddress : ""}\n\n` +
+        `*📍 Origem:* ${data.originCity}${data.originNeighborhood ? " — " + data.originNeighborhood : ""}\n` +
+        `*🎯 Destino:* ${data.destCity}${data.destNeighborhood ? " — " + data.destNeighborhood : ""}\n\n` +
         `*📦 Itens (${itemsCount}):*\n${itemsListText()}\n\n` +
         `*📅 Data:* ${data.date ? format(data.date, "dd/MM/yyyy", { locale: ptBR }) : "-"}\n` +
         `*🕒 Período:* ${PERIODS.find(p => p.id === data.period)?.label}\n` +
