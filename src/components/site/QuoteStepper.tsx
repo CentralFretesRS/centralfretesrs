@@ -369,7 +369,7 @@ export function QuoteStepper() {
           Em instantes você recebe o valor pelo WhatsApp.
         </p>
         <Button
-          className="bg-gradient-brand text-background font-bold"
+          className="bg-gradient-brand text-white font-bold"
           onClick={() => { setDone(false); setData(initial); setStep(0); setActiveTab(TABS[0].id); }}
         >
           Nova cotação
@@ -449,7 +449,7 @@ export function QuoteStepper() {
                 className={cn(
                   "flex items-center gap-1.5 px-2.5 py-1.5 rounded-md whitespace-nowrap font-semibold text-xs transition-all flex-shrink-0",
                   activeTab === id
-                    ? "bg-primary text-background"
+                    ? "bg-primary text-white"
                     : "bg-black/40 text-muted-foreground hover:text-foreground"
                 )}
               >
@@ -487,7 +487,7 @@ export function QuoteStepper() {
                       <button
                         type="button"
                         onClick={() => decItem(id)}
-                        className="counter-btn w-7 h-7 rounded-full bg-black grid place-content-center text-primary hover:bg-primary hover:text-background transition"
+                        className="counter-btn w-7 h-7 rounded-full bg-black grid place-content-center text-primary hover:bg-primary hover:text-white transition"
                         aria-label="Diminuir"
                       >
                         <Minus className="w-3.5 h-3.5" />
@@ -496,7 +496,7 @@ export function QuoteStepper() {
                       <button
                         type="button"
                         onClick={() => incItem(id)}
-                        className="counter-btn w-7 h-7 rounded-full bg-black grid place-content-center text-primary hover:bg-primary hover:text-background transition"
+                        className="counter-btn w-7 h-7 rounded-full bg-black grid place-content-center text-primary hover:bg-primary hover:text-white transition"
                         aria-label="Aumentar"
                       >
                         <Plus className="w-3.5 h-3.5" />
@@ -586,7 +586,7 @@ export function QuoteStepper() {
               {data.date && (
                 <Button
                   type="button"
-                  className="mt-3 w-full bg-gradient-brand text-background font-bold shadow-glow"
+                  className="mt-3 w-full bg-gradient-brand text-white font-bold shadow-glow"
                   onClick={() => setStep(3)}
                 >
                   Confirmar Data
@@ -736,12 +736,12 @@ export function QuoteStepper() {
           <ArrowLeft className="w-4 h-4 mr-1" /> Voltar
         </Button>
         {step < STEPS.length - 1 ? (
-          <Button className="bg-gradient-brand text-background font-bold shadow-glow disabled:opacity-50"
+          <Button className="bg-gradient-brand text-white font-bold shadow-glow disabled:opacity-50"
             disabled={!canNext()} onClick={() => setStep((s) => s + 1)}>
             Próximo <ArrowRight className="w-4 h-4 ml-1" />
           </Button>
         ) : (
-          <Button className="bg-gradient-brand text-background font-bold shadow-glow disabled:opacity-50"
+          <Button className="bg-gradient-brand text-white font-bold shadow-glow disabled:opacity-50"
             disabled={!canNext() || submitting} onClick={submit}>
             <Send className="w-4 h-4 mr-2" /> {submitting ? "Enviando..." : "SOLICITAR COTAÇÃO"}
           </Button>
