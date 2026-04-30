@@ -175,6 +175,16 @@
   .items-grid .counter-btn {
     border: 1.5px solid #FF8C00 !important;
   }
+  /* Garantir 2 colunas no mobile */
+  .items-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+  }
+  @media (min-width: 768px) {
+    .items-grid {
+      grid-template-columns: 1fr 1fr 1fr !important;
+    }
+  }
 
   /* Inputs/selects/textarea globais */
   input, textarea, select, [role="combobox"] {
