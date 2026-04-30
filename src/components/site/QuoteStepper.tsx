@@ -655,12 +655,10 @@ export function QuoteStepper() {
             <div>
               <div className="font-bold text-primary text-xs tracking-widest">📍 ORIGEM</div>
               <div>{data.originCity}{data.originNeighborhood && ` — ${data.originNeighborhood}`}</div>
-              {data.originAddress && <div className="text-muted-foreground text-xs">{data.originAddress}</div>}
             </div>
             <div>
               <div className="font-bold text-primary text-xs tracking-widest">🎯 DESTINO</div>
               <div>{data.destCity}{data.destNeighborhood && ` — ${data.destNeighborhood}`}</div>
-              {data.destAddress && <div className="text-muted-foreground text-xs">{data.destAddress}</div>}
             </div>
             <div>
               <div className="font-bold text-primary text-xs tracking-widest">📦 ITENS ({itemsCount})</div>
