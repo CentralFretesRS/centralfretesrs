@@ -224,7 +224,7 @@ export function Kanban({ onNew }: { onNew?: () => void }) {
                 </Select>
               </div>
             </div>
-            <Button onClick={completeFinancial} className="w-full bg-gradient-brand text-background font-bold">Concluir e lançar</Button>
+            <Button onClick={completeFinancial} className="w-full bg-gradient-brand text-white font-bold">Concluir e lançar</Button>
           </div>
         </DialogContent>
       </Dialog>
