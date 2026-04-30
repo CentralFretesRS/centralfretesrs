@@ -137,6 +137,21 @@
 }
 
 @layer base {
+  #root,
+  main,
+  header,
+  footer,
+  section,
+  [class*="bg-card"],
+  [class*="bg-muted"],
+  [class*="bg-secondary"],
+  [class*="bg-background"],
+  [class*="bg-popover"],
+  [class*="bg-gradient-brand-soft"] {
+    background-color: #000000 !important;
+    background-image: none !important;
+  }
+
   /* Acessibilidade idosos: aumentar 20% fontes pequenas */
   .text-xs { font-size: 0.9rem !important; line-height: 1.35rem !important; }
   .text-sm { font-size: 1.05rem !important; line-height: 1.5rem !important; }
@@ -175,6 +190,18 @@
   }
   .items-grid .counter-btn {
     border: 1.5px solid #FF8C00 !important;
+  }
+  .stepper-block,
+  .item-card,
+  .items-tabs button,
+  [data-slot="calendar"],
+  [data-slot="calendar"] button,
+  [role="dialog"],
+  [role="listbox"],
+  [data-radix-popper-content-wrapper] > *,
+  .rdp-root {
+    background-color: #000000 !important;
+    background-image: none !important;
   }
   /* Garantir 2 colunas no mobile */
   .items-grid {
