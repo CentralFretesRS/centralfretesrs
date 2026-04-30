@@ -48,7 +48,7 @@ function Index() {
                   <a href="#fretes-compartilhados" className="px-3 py-2 rounded-lg bg-black border-2 border-[#FF8C00] text-xs text-white hover:brightness-125 transition-all"><span className="text-primary font-bold">Fretes</span> Compartilhados</a>
                 </div>
               </div>
-              <div>
+              <div className="min-w-0 w-full">
                 <QuoteStepper />
               </div>
             </div>
