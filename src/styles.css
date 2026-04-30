@@ -156,6 +156,26 @@
     border: 2px solid #FF8C00 !important;
   }
 
+  /* Exceções: dentro do stepper de itens, não forçar laranja em todos
+     os botões/cards — apenas o item selecionado e o contador são laranja. */
+  .items-grid button,
+  .items-tabs button {
+    border: none !important;
+  }
+  .items-grid .item-card {
+    border-width: 2px !important;
+    border-style: solid !important;
+  }
+  .items-grid .item-card[data-selected="false"] {
+    border-color: rgba(255,255,255,0.08) !important;
+  }
+  .items-grid .item-card[data-selected="true"] {
+    border-color: #FF8C00 !important;
+  }
+  .items-grid .counter-btn {
+    border: 1.5px solid #FF8C00 !important;
+  }
+
   /* Inputs/selects/textarea globais */
   input, textarea, select, [role="combobox"] {
     border-color: #FF8C00 !important;

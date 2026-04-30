@@ -357,52 +357,65 @@ export function QuoteStepper() {
           </h3>
 
           {/* Tabs */}
-          <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1">
+          <div className="items-tabs flex gap-1.5 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-thin">
             {TABS.map(({ id, label, Icon }) => (
               <button
                 key={id} type="button" onClick={() => setActiveTab(id)}
                 className={cn(
-                  "flex items-center gap-2 px-3 py-2 rounded-lg whitespace-nowrap font-bold text-sm transition-all flex-shrink-0",
+                  "flex items-center gap-1.5 px-2.5 py-1.5 rounded-md whitespace-nowrap font-semibold text-xs transition-all flex-shrink-0",
                   activeTab === id
-                    ? "bg-gradient-brand text-background shadow-glow"
-                    : "bg-muted/40 text-foreground hover:brightness-125"
+                    ? "bg-primary text-background"
+                    : "bg-black/40 text-muted-foreground hover:text-foreground"
                 )}
               >
-                <Icon className="w-4 h-4" /> {label}
+                <Icon className="w-3.5 h-3.5" /> {label}
               </button>
             ))}
           </div>
 
           {/* Items grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <div className="items-grid grid grid-cols-2 sm:grid-cols-3 gap-2.5">
             {currentTab.items.map(({ id, label, Icon }) => {
               const qty = data.items[id] || 0;
               const selected = qty > 0;
               return (
-                <div key={id} className={cn(
-                  "rounded-xl border-2 p-3 flex flex-col items-center gap-2 transition-all",
-                  selected ? "border-primary bg-gradient-brand-soft shadow-glow" : "border-border bg-muted/30"
-                )}>
-                  <button type="button" onClick={() => incItem(id)}
-                    className="flex flex-col items-center gap-1 w-full">
-                    <Icon className={cn("w-8 h-8", selected ? "text-primary" : "text-foreground")} />
-                    <span className="text-xs font-bold text-center leading-tight">{label}</span>
-                  </button>
+                <div
+                  key={id}
+                  data-selected={selected ? "true" : "false"}
+                  className={cn(
+                    "item-card rounded-lg p-2.5 flex flex-col items-center gap-1.5 transition-all bg-black/60"
+                  )}
+                >
+                  <Icon className={cn("w-6 h-6", selected ? "text-primary" : "text-muted-foreground")} />
+                  <span className="text-[0.78rem] font-medium text-center leading-tight text-foreground/90 min-h-[2.2em]">
+                    {label}
+                  </span>
                   {selected ? (
-                    <div className="flex items-center gap-2 mt-1">
-                      <button type="button" onClick={() => decItem(id)}
-                        className="w-7 h-7 rounded-full bg-background border border-primary grid place-content-center hover:bg-primary hover:text-background transition">
-                        <Minus className="w-3.5 h-3.5" />
+                    <div className="flex items-center gap-1.5 mt-0.5">
+                      <button
+                        type="button"
+                        onClick={() => decItem(id)}
+                        className="counter-btn w-6 h-6 rounded-full bg-black grid place-content-center text-primary hover:bg-primary hover:text-background transition"
+                        aria-label="Diminuir"
+                      >
+                        <Minus className="w-3 h-3" />
                       </button>
-                      <span className="font-bold text-base min-w-[1.5rem] text-center">{qty}</span>
-                      <button type="button" onClick={() => incItem(id)}
-                        className="w-7 h-7 rounded-full bg-background border border-primary grid place-content-center hover:bg-primary hover:text-background transition">
-                        <Plus className="w-3.5 h-3.5" />
+                      <span className="font-bold text-sm min-w-[1.2rem] text-center text-primary">{qty}</span>
+                      <button
+                        type="button"
+                        onClick={() => incItem(id)}
+                        className="counter-btn w-6 h-6 rounded-full bg-black grid place-content-center text-primary hover:bg-primary hover:text-background transition"
+                        aria-label="Aumentar"
+                      >
+                        <Plus className="w-3 h-3" />
                       </button>
                     </div>
                   ) : (
-                    <button type="button" onClick={() => incItem(id)}
-                      className="text-xs font-bold text-primary mt-1">
+                    <button
+                      type="button"
+                      onClick={() => incItem(id)}
+                      className="text-[0.72rem] font-bold text-primary mt-0.5 px-2 py-0.5 rounded hover:bg-primary/10 transition"
+                    >
                       + Adicionar
                     </button>
                   )}
