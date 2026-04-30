@@ -48,11 +48,11 @@
   --radius: 0.875rem;
 
   /* Dark by default */
-  --background: oklch(0.10 0.01 60);
+  --background: oklch(0 0 0);
   --foreground: oklch(0.985 0.005 80);
-  --card: oklch(0.145 0.012 60);
+  --card: oklch(0 0 0);
   --card-foreground: oklch(0.985 0.005 80);
-  --popover: oklch(0.145 0.012 60);
+  --popover: oklch(0 0 0);
   --popover-foreground: oklch(0.985 0.005 80);
 
   /* Brand orange */
@@ -87,8 +87,8 @@
 
   /* Brand gradients */
   --gradient-brand: linear-gradient(135deg, oklch(0.86 0.17 95) 0%, oklch(0.66 0.22 40) 100%);
-  --gradient-brand-soft: linear-gradient(135deg, oklch(0.86 0.17 95 / 0.18) 0%, oklch(0.66 0.22 40 / 0.18) 100%);
-  --gradient-dark: radial-gradient(ellipse at top, oklch(0.18 0.02 60) 0%, oklch(0.08 0.01 60) 60%);
+  --gradient-brand-soft: linear-gradient(135deg, oklch(0.86 0.17 95 / 0.18) 0%, oklch(0.86 0.17 95 / 0.18) 100%);
+  --gradient-dark: #000000;
 
   /* Shadows */
   --shadow-glow: 0 10px 40px -10px oklch(0.74 0.18 55 / 0.45);
