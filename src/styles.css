@@ -48,23 +48,23 @@
   --radius: 0.875rem;
 
   /* Dark by default */
-  --background: oklch(0 0 0);
+  --background: #000000;
   --foreground: oklch(0.985 0.005 80);
-  --card: oklch(0 0 0);
+  --card: #000000;
   --card-foreground: oklch(0.985 0.005 80);
-  --popover: oklch(0 0 0);
+  --popover: #000000;
   --popover-foreground: oklch(0.985 0.005 80);
 
   /* Brand orange */
-  --primary: oklch(0.74 0.18 55);
-  --primary-foreground: oklch(0.12 0.02 60);
+  --primary: #FF8C00;
+  --primary-foreground: #FFFFFF;
 
-  --secondary: oklch(0.20 0.015 60);
+  --secondary: #000000;
   --secondary-foreground: oklch(0.985 0.005 80);
-  --muted: oklch(0.18 0.012 60);
+  --muted: #000000;
   --muted-foreground: oklch(0.68 0.02 80);
-  --accent: oklch(0.74 0.18 55);
-  --accent-foreground: oklch(0.12 0.02 60);
+  --accent: #000000;
+  --accent-foreground: #FFFFFF;
   --destructive: oklch(0.62 0.22 25);
   --destructive-foreground: oklch(0.985 0.005 80);
 
@@ -75,19 +75,19 @@
   --info: oklch(0.65 0.18 240);
   --info-foreground: oklch(0.985 0.005 80);
 
-  --border: oklch(0.25 0.015 60);
-  --input: oklch(0.22 0.015 60);
-  --ring: oklch(0.74 0.18 55);
+  --border: #FF8C00;
+  --input: #FF8C00;
+  --ring: #FF8C00;
 
-  --chart-1: oklch(0.74 0.18 55);
+  --chart-1: #FF8C00;
   --chart-2: oklch(0.85 0.17 90);
   --chart-3: oklch(0.65 0.18 240);
   --chart-4: oklch(0.70 0.18 145);
   --chart-5: oklch(0.62 0.22 25);
 
   /* Brand gradients */
-  --gradient-brand: linear-gradient(135deg, oklch(0.86 0.17 95) 0%, oklch(0.66 0.22 40) 100%);
-  --gradient-brand-soft: linear-gradient(135deg, oklch(0.86 0.17 95 / 0.18) 0%, oklch(0.86 0.17 95 / 0.18) 100%);
+  --gradient-brand: linear-gradient(135deg, #FF8C00 0%, #FF8C00 100%);
+  --gradient-brand-soft: linear-gradient(135deg, #000000 0%, #000000 100%);
   --gradient-dark: #000000;
 
   /* Shadows */
@@ -97,11 +97,12 @@
 
 @layer base {
   * { border-color: var(--color-border); }
-  html, body { background: var(--background); color: var(--foreground); overflow-x: hidden; max-width: 100vw; }
+  html, body { background: #000000 !important; color: var(--foreground); overflow-x: hidden; max-width: 100vw; }
   html { scroll-behavior: smooth; }
   body {
     font-family: var(--font-sans);
-    background-image: var(--gradient-dark);
+    background-color: #000000 !important;
+    background-image: none !important;
     background-attachment: fixed;
     min-height: 100vh;
     font-size: 1.2em;
@@ -136,6 +137,31 @@
 }
 
 @layer base {
+  #root,
+  main,
+  header,
+  footer,
+  section,
+  [class*="bg-card"],
+  [class*="bg-muted"],
+  [class*="bg-secondary"],
+  [class*="bg-background"],
+  [class*="bg-popover"],
+  [class*="bg-gradient-brand-soft"] {
+    background-color: #000000 !important;
+    background-image: none !important;
+  }
+  .bg-primary,
+  .bg-gradient-brand,
+  [class*="bg-[#FF8C00]"] {
+    color: #FFFFFF !important;
+  }
+  .bg-primary svg,
+  .bg-gradient-brand svg,
+  [class*="bg-[#FF8C00]"] svg {
+    color: #FFFFFF !important;
+  }
+
   /* Acessibilidade idosos: aumentar 20% fontes pequenas */
   .text-xs { font-size: 0.9rem !important; line-height: 1.35rem !important; }
   .text-sm { font-size: 1.05rem !important; line-height: 1.5rem !important; }
@@ -174,6 +200,18 @@
   }
   .items-grid .counter-btn {
     border: 1.5px solid #FF8C00 !important;
+  }
+  .stepper-block,
+  .item-card,
+  .items-tabs button,
+  [data-slot="calendar"],
+  [data-slot="calendar"] button,
+  [role="dialog"],
+  [role="listbox"],
+  [data-radix-popper-content-wrapper] > *,
+  .rdp-root {
+    background-color: #000000 !important;
+    background-image: none !important;
   }
   /* Garantir 2 colunas no mobile */
   .items-grid {

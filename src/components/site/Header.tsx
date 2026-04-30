@@ -12,7 +12,7 @@ export function Header() {
           <a href="#como-funciona" className="hover:text-primary transition-colors">Como Funciona</a>
           <a href="#contato" className="hover:text-primary transition-colors">Contato</a>
         </nav>
-        <Button asChild className="bg-gradient-brand text-background font-bold hover:opacity-90 shadow-glow">
+        <Button asChild className="bg-gradient-brand text-white font-bold hover:opacity-90 shadow-glow">
           <a href="#cotacao">Solicitar Cotação</a>
         </Button>
       </div>

@@ -48,9 +48,9 @@ export function Footer() {
           <div>
             <h4 className="font-display text-sm tracking-widest text-primary mb-3">REDES</h4>
             <div className="flex gap-3">
-              <a href="#" className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center hover:bg-gradient-brand hover:text-background transition-all"><Instagram className="w-5 h-5" /></a>
-              <a href="#" className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center hover:bg-gradient-brand hover:text-background transition-all"><Facebook className="w-5 h-5" /></a>
-              <a href="#" className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center hover:bg-gradient-brand hover:text-background transition-all"><MessageCircle className="w-5 h-5" /></a>
+              <a href="#" className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center hover:bg-gradient-brand hover:text-white transition-all"><Instagram className="w-5 h-5" /></a>
+              <a href="#" className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center hover:bg-gradient-brand hover:text-white transition-all"><Facebook className="w-5 h-5" /></a>
+              <a href="#" className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center hover:bg-gradient-brand hover:text-white transition-all"><MessageCircle className="w-5 h-5" /></a>
             </div>
           </div>
         </div>
@@ -75,7 +75,7 @@ export function Footer() {
               <Input type="password" className="mt-1" value={pwd} onChange={(e) => setPwd(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && login()} />
             </div>
-            <Button onClick={login} disabled={loading} className="w-full bg-gradient-brand text-background font-bold">
+            <Button onClick={login} disabled={loading} className="w-full bg-gradient-brand text-white font-bold">
               {loading ? "Entrando..." : "Entrar"}
             </Button>
           </div>

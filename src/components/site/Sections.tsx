@@ -18,7 +18,7 @@ export function HowItWorks() {
             <div key={title} className="rounded-2xl bg-card border border-border p-6 shadow-card hover:border-primary/50 transition-all">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 rounded-xl bg-gradient-brand flex items-center justify-center shadow-glow">
-                  <Icon className="w-6 h-6 text-background" />
+                  <Icon className="w-6 h-6 text-white" />
                 </div>
                 <div className="font-display text-3xl text-gradient-brand font-bold">0{i+1}</div>
               </div>
@@ -53,7 +53,7 @@ export function Services() {
           {items.map(({ Icon, name, desc }) => (
             <div key={name} className="group rounded-2xl bg-card border border-border p-5 shadow-card hover:border-primary hover:-translate-y-1 transition-all">
               <div className="w-12 h-12 rounded-xl bg-gradient-brand-soft border border-primary/30 flex items-center justify-center mb-4 group-hover:bg-gradient-brand transition-all">
-                <Icon className="w-6 h-6 text-primary group-hover:text-background transition-colors" />
+                <Icon className="w-6 h-6 text-primary group-hover:text-white transition-colors" />
               </div>
               <h3 className="font-display text-lg mb-1">{name}</h3>
               <p className="text-xs text-muted-foreground">{desc}</p>

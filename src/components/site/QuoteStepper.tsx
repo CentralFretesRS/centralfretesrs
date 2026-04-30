@@ -362,14 +362,14 @@ export function QuoteStepper() {
 
   if (done) {
     return (
-      <div className="rounded-2xl bg-card border border-border p-8 text-center shadow-card">
+    <div className="rounded-2xl bg-card border border-border p-8 text-center shadow-card">
         <CheckCircle2 className="w-16 h-16 mx-auto text-success mb-4" />
         <h3 className="font-display text-2xl mb-2">Cotação enviada!</h3>
         <p className="text-muted-foreground mb-6">
           Em instantes você recebe o valor pelo WhatsApp.
         </p>
         <Button
-          className="bg-gradient-brand text-background font-bold"
+          className="bg-gradient-brand text-white font-bold"
           onClick={() => { setDone(false); setData(initial); setStep(0); setActiveTab(TABS[0].id); }}
         >
           Nova cotação
@@ -408,7 +408,7 @@ export function QuoteStepper() {
               { k: "origin", title: "Origem", cityKey: "originCity", nKey: "originNeighborhood" },
               { k: "dest", title: "Destino", cityKey: "destCity", nKey: "destNeighborhood" },
             ].map((b) => (
-              <div key={b.k} className="stepper-block rounded-xl bg-muted/40 p-4 space-y-3">
+              <div key={b.k} className="stepper-block rounded-xl bg-background p-4 space-y-3">
                 <div className="font-display text-sm tracking-widest text-primary">{b.title.toUpperCase()}</div>
                 <div>
                   <Label className="text-xs">Cidade *</Label>
@@ -449,7 +449,7 @@ export function QuoteStepper() {
                 className={cn(
                   "flex items-center gap-1.5 px-2.5 py-1.5 rounded-md whitespace-nowrap font-semibold text-xs transition-all flex-shrink-0",
                   activeTab === id
-                    ? "bg-primary text-background"
+                    ? "bg-primary text-white"
                     : "bg-black/40 text-muted-foreground hover:text-foreground"
                 )}
               >
@@ -487,7 +487,7 @@ export function QuoteStepper() {
                       <button
                         type="button"
                         onClick={() => decItem(id)}
-                        className="counter-btn w-7 h-7 rounded-full bg-black grid place-content-center text-primary hover:bg-primary hover:text-background transition"
+                        className="counter-btn w-7 h-7 rounded-full bg-black grid place-content-center text-primary hover:bg-primary hover:text-white transition"
                         aria-label="Diminuir"
                       >
                         <Minus className="w-3.5 h-3.5" />
@@ -496,7 +496,7 @@ export function QuoteStepper() {
                       <button
                         type="button"
                         onClick={() => incItem(id)}
-                        className="counter-btn w-7 h-7 rounded-full bg-black grid place-content-center text-primary hover:bg-primary hover:text-background transition"
+                        className="counter-btn w-7 h-7 rounded-full bg-black grid place-content-center text-primary hover:bg-primary hover:text-white transition"
                         aria-label="Aumentar"
                       >
                         <Plus className="w-3.5 h-3.5" />
@@ -527,7 +527,7 @@ export function QuoteStepper() {
           )}
 
           {/* Summary footer */}
-          <div className="rounded-xl bg-muted/40 border border-primary/40 p-4">
+          <div className="rounded-xl bg-background border border-primary/40 p-4">
             <div className="flex items-center justify-between mb-2">
               <div className="font-display text-sm text-primary font-bold">
                 ITENS SELECIONADOS ({itemsCount})
@@ -586,7 +586,7 @@ export function QuoteStepper() {
               {data.date && (
                 <Button
                   type="button"
-                  className="mt-3 w-full bg-gradient-brand text-background font-bold shadow-glow"
+                  className="mt-3 w-full bg-gradient-brand text-white font-bold shadow-glow"
                   onClick={() => setStep(3)}
                 >
                   Confirmar Data
@@ -601,8 +601,8 @@ export function QuoteStepper() {
                     className={cn(
                       "flex flex-col items-center gap-1 py-3 rounded-lg border-2 transition-all",
                       data.period === id
-                        ? "border-primary bg-gradient-brand-soft"
-                        : "border-border bg-muted/30 hover:border-primary/50"
+                        ? "border-primary bg-background"
+                        : "border-border bg-background hover:border-primary/50"
                     )}>
                     <Icon className="w-5 h-5" />
                     <span className="text-xs font-bold">{label}</span>
@@ -612,7 +612,7 @@ export function QuoteStepper() {
             </div>
           </div>
 
-          <label className="flex items-start gap-3 p-4 rounded-xl bg-muted/40 border border-border cursor-pointer">
+          <label className="flex items-start gap-3 p-4 rounded-xl bg-background border border-border cursor-pointer">
             <Checkbox checked={data.needsHelpers} onCheckedChange={(v) => update("needsHelpers", !!v)} className="mt-0.5" />
             <div>
               <div className="font-bold text-sm">Preciso de ajudantes</div>
@@ -630,8 +630,8 @@ export function QuoteStepper() {
                   <button key={id} type="button" onClick={() => toggleCondition(id)}
                     className={cn(
                       "px-3 py-2.5 rounded-lg border-2 text-xs font-bold transition-all text-left",
-                      sel ? "border-primary bg-gradient-brand-soft text-primary shadow-glow"
-                          : "border-border bg-muted/30 hover:border-primary/50"
+                      sel ? "border-primary bg-background text-primary shadow-glow"
+                          : "border-border bg-background hover:border-primary/50"
                     )}>
                     {sel ? "✓ " : ""}{label}
                   </button>
@@ -663,7 +663,7 @@ export function QuoteStepper() {
             <ScrollText className="text-primary" /> Resumo do pedido
           </h3>
 
-          <div className="rounded-xl bg-muted/40 border-2 border-primary/40 p-4 space-y-3 text-sm">
+          <div className="rounded-xl bg-background border-2 border-primary/40 p-4 space-y-3 text-sm">
             <div>
               <div className="font-bold text-primary text-xs tracking-widest">📍 ORIGEM</div>
               <div>{data.originCity}{data.originNeighborhood && ` — ${data.originNeighborhood}`}</div>
@@ -736,12 +736,12 @@ export function QuoteStepper() {
           <ArrowLeft className="w-4 h-4 mr-1" /> Voltar
         </Button>
         {step < STEPS.length - 1 ? (
-          <Button className="bg-gradient-brand text-background font-bold shadow-glow disabled:opacity-50"
+          <Button className="bg-gradient-brand text-white font-bold shadow-glow disabled:opacity-50"
             disabled={!canNext()} onClick={() => setStep((s) => s + 1)}>
             Próximo <ArrowRight className="w-4 h-4 ml-1" />
           </Button>
         ) : (
-          <Button className="bg-gradient-brand text-background font-bold shadow-glow disabled:opacity-50"
+          <Button className="bg-gradient-brand text-white font-bold shadow-glow disabled:opacity-50"
             disabled={!canNext() || submitting} onClick={submit}>
             <Send className="w-4 h-4 mr-2" /> {submitting ? "Enviando..." : "SOLICITAR COTAÇÃO"}
           </Button>
@@ -753,7 +753,7 @@ export function QuoteStepper() {
 
 function Alert({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex gap-2 p-3 rounded-lg bg-warning/10 border border-warning/30 text-xs text-warning-foreground/90">
+    <div className="flex gap-2 p-3 rounded-lg bg-background border border-warning/30 text-xs text-warning-foreground/90">
       <AlertTriangle className="w-4 h-4 flex-shrink-0 text-warning mt-0.5" />
       <div>{children}</div>
     </div>

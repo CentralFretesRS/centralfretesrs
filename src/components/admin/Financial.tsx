@@ -99,7 +99,7 @@ export function Financial() {
             <CartesianGrid strokeDasharray="3 3" stroke="oklch(0.25 0.015 60)" />
             <XAxis dataKey="name" stroke="oklch(0.68 0.02 80)" fontSize={11} />
             <YAxis stroke="oklch(0.68 0.02 80)" fontSize={11} />
-            <Tooltip contentStyle={{ background: "oklch(0.145 0.012 60)", border: "1px solid oklch(0.25 0.015 60)", borderRadius: 12 }} />
+            <Tooltip contentStyle={{ background: "#000000", border: "1px solid #FF8C00", borderRadius: 12 }} />
             <Bar dataKey="value" fill="oklch(0.74 0.18 55)" radius={[8, 8, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
