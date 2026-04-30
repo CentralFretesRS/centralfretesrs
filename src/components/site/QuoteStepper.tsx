@@ -375,8 +375,8 @@ export function QuoteStepper() {
 
           {/* Items grid — 2 columns mobile, 3 on tablet+ */}
           <div
-            className="items-grid gap-2.5"
-            style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}
+            className="items-grid gap-2.5 w-full"
+            style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,1fr)" }}
           >
             {currentTab.items.map(({ id, label, Icon }) => {
               const qty = data.items[id] || 0;
@@ -386,7 +386,7 @@ export function QuoteStepper() {
                   key={id}
                   data-selected={selected ? "true" : "false"}
                   className={cn(
-                    "item-card rounded-lg p-3 flex flex-col items-center justify-between gap-1.5 transition-all bg-black"
+                    "item-card rounded-lg p-3 flex flex-col items-center justify-between gap-1.5 transition-all bg-black min-w-0 w-full overflow-hidden"
                   )}
                   style={{ maxHeight: 140, minHeight: 130 }}
                 >
