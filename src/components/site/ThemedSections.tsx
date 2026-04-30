@@ -94,7 +94,7 @@ export function ThemedSections() {
                 <p className="text-lg text-muted-foreground max-w-xl">{s.text}</p>
                 <a
                   href="#cotacao"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#FF8C00] text-background font-display text-base font-bold uppercase tracking-wide shadow-glow hover:brightness-110 transition-all"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#FF8C00] text-white font-display text-base font-bold uppercase tracking-wide shadow-glow hover:brightness-110 transition-all"
                 >
                   Solicitar Cotação
                   <ArrowRight className="w-5 h-5" />

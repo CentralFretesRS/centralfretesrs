@@ -8,7 +8,7 @@ export function Logo({ size = 40 }: { size?: number }) {
         style={{ width: size, height: size, transform: "rotate(45deg)" }}
       >
         <ChevronsRight
-          className="text-background"
+          className="text-white"
           style={{ width: size * 0.55, height: size * 0.55, transform: "rotate(-45deg)" }}
           strokeWidth={3}
         />
