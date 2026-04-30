@@ -22,10 +22,10 @@ type Quote = {
 };
 
 const COLUMNS = [
-  { id: "recebido", label: "Recebido", accent: "warning", emoji: "🟡", border: "border-warning/60", bg: "bg-warning/5", chip: "bg-warning/20 text-warning" },
-  { id: "enviado", label: "Respondido", accent: "primary", emoji: "🟠", border: "border-primary/60", bg: "bg-primary/5", chip: "bg-primary/20 text-primary" },
-  { id: "agendado", label: "Agendado", accent: "info", emoji: "🔵", border: "border-info/60", bg: "bg-info/5", chip: "bg-info/20 text-info" },
-  { id: "realizado", label: "Realizado", accent: "success", emoji: "🟢", border: "border-success/60", bg: "bg-success/5", chip: "bg-success/20 text-success" },
+  { id: "recebido", label: "Recebido", accent: "warning", emoji: "🟡", border: "border-warning/60", bg: "bg-background", chip: "bg-background text-warning" },
+  { id: "enviado", label: "Respondido", accent: "primary", emoji: "🟠", border: "border-primary/60", bg: "bg-background", chip: "bg-background text-primary" },
+  { id: "agendado", label: "Agendado", accent: "info", emoji: "🔵", border: "border-info/60", bg: "bg-background", chip: "bg-background text-info" },
+  { id: "realizado", label: "Realizado", accent: "success", emoji: "🟢", border: "border-success/60", bg: "bg-background", chip: "bg-background text-success" },
 ] as const;
 
 export function Kanban({ onNew }: { onNew?: () => void }) {
@@ -116,7 +116,7 @@ export function Kanban({ onNew }: { onNew?: () => void }) {
   return (
     <div>
       {/* Filters */}
-      <div className="rounded-2xl border border-border bg-card/60 p-3 mb-4 flex flex-wrap items-end gap-2">
+      <div className="rounded-2xl border border-border bg-background p-3 mb-4 flex flex-wrap items-end gap-2">
         <div className="flex items-center gap-1 text-xs text-muted-foreground uppercase tracking-wider mr-1"><Filter className="w-3.5 h-3.5" /> Filtros</div>
         <div><Label className="text-[10px]">De</Label><Input type="date" className="mt-1 h-8 text-xs w-[140px]" value={fFrom} onChange={(e) => setFFrom(e.target.value)} /></div>
         <div><Label className="text-[10px]">Até</Label><Input type="date" className="mt-1 h-8 text-xs w-[140px]" value={fTo} onChange={(e) => setFTo(e.target.value)} /></div>
@@ -163,7 +163,7 @@ export function Kanban({ onNew }: { onNew?: () => void }) {
                       </div>
                       <div className="text-xs text-muted-foreground mt-1 flex items-center gap-1"><MapPin className="w-3 h-3" />{q.origin_city} → {q.destination_city}</div>
                       {q.desired_date && <div className="text-xs text-muted-foreground flex items-center gap-1"><Calendar className="w-3 h-3" />{format(new Date(q.desired_date + "T12:00"), "dd/MM/yy", { locale: ptBR })} {q.period}</div>}
-                      <div className="text-xs mt-1 inline-block px-2 py-0.5 rounded bg-gradient-brand-soft border border-primary/30 text-primary capitalize">{q.item_category}{q.item_quantity ? ` · ${q.item_quantity}` : ""}</div>
+                      <div className="text-xs mt-1 inline-block px-2 py-0.5 rounded bg-background border border-primary/30 text-primary capitalize">{q.item_category}{q.item_quantity ? ` · ${q.item_quantity}` : ""}</div>
                       {q.item_notes && <div className="text-[11px] text-muted-foreground mt-1 line-clamp-2 italic">"{q.item_notes}"</div>}
                       <div className="flex items-center justify-between gap-1 mt-3">
                         <Button size="sm" variant="ghost" disabled={ci === 0} onClick={() => move(q, -1)} className="h-7 px-2"><ChevronLeft className="w-3 h-3" /></Button>
