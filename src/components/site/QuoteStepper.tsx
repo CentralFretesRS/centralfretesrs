@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import {
   MapPin, Package, Calendar as CalendarIcon, User, ArrowLeft, ArrowRight,
-  Truck, Box, Sofa, Refrigerator, MoreHorizontal, Sun, CloudSun, Moon, Send,
-  AlertTriangle, CheckCircle2,
+  Sun, CloudSun, Moon, Send, AlertTriangle, CheckCircle2,
+  Sofa, Armchair, Tv, Refrigerator, Microwave, Bed, Shirt, Flame,
+  Wind, WashingMachine, Flower2, TreePine, Briefcase, Monitor, Printer,
+  Server, Box, Bike, MoreHorizontal, Plus, Minus, Trash2,
+  UtensilsCrossed, LampDesk, BookOpen, Coffee, ChefHat, Square,
+  Building2, Boxes, ScrollText,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,13 +23,95 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { WHATSAPP_NUMBER, SERVICE_CITIES } from "@/lib/config";
 
-const CATEGORIES = [
-  { id: "mudanca", label: "Mudança", Icon: Truck },
-  { id: "caixas", label: "Caixas", Icon: Box },
-  { id: "movel", label: "Móvel", Icon: Sofa },
-  { id: "eletro", label: "Eletrodoméstico", Icon: Refrigerator },
-  { id: "outro", label: "Outro", Icon: MoreHorizontal },
+// ---------- Categories & Items ----------
+type ItemDef = { id: string; label: string; Icon: any };
+type TabDef = { id: string; label: string; Icon: any; items: ItemDef[] };
+
+const TABS: TabDef[] = [
+  {
+    id: "sala", label: "Sala", Icon: Sofa,
+    items: [
+      { id: "sofa-2", label: "Sofá 2 lugares", Icon: Sofa },
+      { id: "sofa-3", label: "Sofá 3 lugares", Icon: Sofa },
+      { id: "poltrona", label: "Poltrona", Icon: Armchair },
+      { id: "rack", label: "Rack", Icon: Tv },
+      { id: "estante", label: "Estante", Icon: BookOpen },
+      { id: "mesa-centro", label: "Mesa de centro", Icon: Square },
+      { id: "tapete", label: "Tapete", Icon: Square },
+    ],
+  },
+  {
+    id: "cozinha", label: "Cozinha", Icon: ChefHat,
+    items: [
+      { id: "geladeira", label: "Geladeira", Icon: Refrigerator },
+      { id: "fogao", label: "Fogão", Icon: Flame },
+      { id: "microondas", label: "Micro-ondas", Icon: Microwave },
+      { id: "armario-cozinha", label: "Armário de cozinha", Icon: Boxes },
+      { id: "paneleiro", label: "Paneleiro", Icon: Coffee },
+      { id: "mesa-jantar", label: "Mesa de jantar", Icon: UtensilsCrossed },
+      { id: "cadeiras", label: "Cadeiras", Icon: Armchair },
+    ],
+  },
+  {
+    id: "quarto", label: "Quarto", Icon: Bed,
+    items: [
+      { id: "cama-solteiro", label: "Cama solteiro", Icon: Bed },
+      { id: "cama-casal", label: "Cama casal", Icon: Bed },
+      { id: "colchao-solteiro", label: "Colchão solteiro", Icon: Bed },
+      { id: "colchao-casal", label: "Colchão casal", Icon: Bed },
+      { id: "guarda-roupa", label: "Guarda-roupa", Icon: Shirt },
+      { id: "comoda", label: "Cômoda", Icon: Boxes },
+      { id: "criado-mudo", label: "Criado-mudo", Icon: LampDesk },
+    ],
+  },
+  {
+    id: "eletronicos", label: "Eletrônicos", Icon: Tv,
+    items: [
+      { id: "tv", label: "TV", Icon: Tv },
+      { id: "maq-lavar", label: "Máquina de lavar", Icon: WashingMachine },
+      { id: "secadora", label: "Secadora", Icon: WashingMachine },
+      { id: "ar-cond", label: "Ar condicionado", Icon: Wind },
+    ],
+  },
+  {
+    id: "jardim", label: "Plantas & Jardim", Icon: TreePine,
+    items: [
+      { id: "planta-pq", label: "Planta pequena", Icon: Flower2 },
+      { id: "planta-md", label: "Planta média", Icon: TreePine },
+      { id: "vaso", label: "Vaso decorativo", Icon: Flower2 },
+      { id: "mob-jardim", label: "Mobília de jardim", Icon: Armchair },
+      { id: "churrasq", label: "Churrasqueira", Icon: Flame },
+      { id: "outros-jardim", label: "Outros jardim", Icon: MoreHorizontal },
+    ],
+  },
+  {
+    id: "escritorio", label: "Escritório", Icon: Briefcase,
+    items: [
+      { id: "mesa-esc", label: "Mesa de escritório", Icon: LampDesk },
+      { id: "cad-esc", label: "Cadeira de escritório", Icon: Armchair },
+      { id: "arm-esc", label: "Armário de escritório", Icon: Boxes },
+      { id: "estante-arq", label: "Estante/Arquivo", Icon: BookOpen },
+      { id: "computador", label: "Computador/Monitor", Icon: Monitor },
+      { id: "impressora", label: "Impressora", Icon: Printer },
+      { id: "servidor", label: "Servidor/Rack TI", Icon: Server },
+      { id: "balcao", label: "Balcão", Icon: Building2 },
+      { id: "prateleiras", label: "Prateleiras", Icon: BookOpen },
+    ],
+  },
+  {
+    id: "outros", label: "Outros", Icon: Box,
+    items: [
+      { id: "caixas", label: "Caixas", Icon: Box },
+      { id: "bicicleta", label: "Bicicleta", Icon: Bike },
+      { id: "moto", label: "Moto", Icon: Bike },
+      { id: "outros-livre", label: "Outros (descrever)", Icon: MoreHorizontal },
+    ],
+  },
 ];
+
+const ALL_ITEMS: Record<string, string> = TABS.flatMap(t => t.items).reduce(
+  (acc, i) => ({ ...acc, [i.id]: i.label }), {}
+);
 
 const PERIODS = [
   { id: "manha", label: "Manhã", Icon: Sun },
@@ -33,45 +119,114 @@ const PERIODS = [
   { id: "noite", label: "Noite", Icon: Moon },
 ];
 
+const CONDITIONS = [
+  { id: "escada", label: "Tem escada" },
+  { id: "elevador", label: "Tem elevador" },
+  { id: "fragil", label: "Itens frágeis" },
+  { id: "desmontar", label: "Precisa desmontar/montar" },
+  { id: "sem-vaga", label: "Sem vaga para caminhão" },
+  { id: "predio-alto", label: "Prédio alto (>5° andar)" },
+  { id: "outros-cond", label: "Outros" },
+];
+
 const STEPS = ["Origem & Destino", "Itens", "Detalhes", "Contato"];
 
 type FormState = {
   originCity: string; originNeighborhood: string; originAddress: string;
   destCity: string; destNeighborhood: string; destAddress: string;
-  category: string; quantity: string; itemNotes: string;
-  date: Date | undefined; period: string; needsHelpers: boolean; technical: string;
+  items: Record<string, number>;
+  itemsOtherText: string;
+  date: Date | undefined; period: string;
+  needsHelpers: boolean;
+  conditions: string[];
+  conditionsOtherText: string;
+  observations: string;
   name: string; whatsapp: string;
 };
 
 const initial: FormState = {
   originCity: "", originNeighborhood: "", originAddress: "",
   destCity: "", destNeighborhood: "", destAddress: "",
-  category: "", quantity: "", itemNotes: "",
-  date: undefined, period: "", needsHelpers: false, technical: "",
+  items: {}, itemsOtherText: "",
+  date: undefined, period: "",
+  needsHelpers: false,
+  conditions: [], conditionsOtherText: "",
+  observations: "",
   name: "", whatsapp: "",
 };
 
 export function QuoteStepper() {
   const [step, setStep] = useState(0);
   const [data, setData] = useState<FormState>(initial);
+  const [activeTab, setActiveTab] = useState(TABS[0].id);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
 
   const update = <K extends keyof FormState>(k: K, v: FormState[K]) =>
     setData((d) => ({ ...d, [k]: v }));
 
+  const setItemQty = (id: string, qty: number) => {
+    setData((d) => {
+      const next = { ...d.items };
+      if (qty <= 0) delete next[id];
+      else next[id] = qty;
+      return { ...d, items: next };
+    });
+  };
+
+  const incItem = (id: string) => setItemQty(id, (data.items[id] || 0) + 1);
+  const decItem = (id: string) => setItemQty(id, (data.items[id] || 0) - 1);
+
+  const toggleCondition = (id: string) => {
+    setData((d) => ({
+      ...d,
+      conditions: d.conditions.includes(id)
+        ? d.conditions.filter(c => c !== id)
+        : [...d.conditions, id],
+    }));
+  };
+
+  const itemsCount = useMemo(
+    () => Object.values(data.items).reduce((s, n) => s + n, 0),
+    [data.items]
+  );
+
   const canNext = () => {
     if (step === 0) return data.originCity && data.destCity;
-    if (step === 1) return !!data.category;
+    if (step === 1) return itemsCount > 0;
     if (step === 2) return !!data.date && !!data.period;
     if (step === 3) return data.name.trim().length > 1 && data.whatsapp.replace(/\D/g, "").length >= 10;
     return false;
+  };
+
+  const itemsListText = () => {
+    const lines = Object.entries(data.items).map(([id, qty]) => {
+      if (id === "outros-livre" && data.itemsOtherText)
+        return `• ${qty}x ${ALL_ITEMS[id]}: ${data.itemsOtherText}`;
+      return `• ${qty}x ${ALL_ITEMS[id] || id}`;
+    });
+    return lines.join("\n");
+  };
+
+  const conditionsText = () => {
+    const lines = data.conditions.map(c => {
+      if (c === "outros-cond" && data.conditionsOtherText)
+        return `• Outros: ${data.conditionsOtherText}`;
+      return `• ${CONDITIONS.find(x => x.id === c)?.label}`;
+    });
+    return lines.join("\n");
   };
 
   const submit = async () => {
     if (!canNext()) return;
     setSubmitting(true);
     try {
+      // Build a category summary for DB compatibility
+      const firstCat = Object.keys(data.items)[0] || "outros";
+      const itemsSummary = Object.entries(data.items)
+        .map(([id, q]) => `${q}x ${ALL_ITEMS[id] || id}`)
+        .join("; ");
+
       const { error } = await supabase.from("quotes").insert({
         client_name: data.name,
         whatsapp: data.whatsapp,
@@ -81,13 +236,16 @@ export function QuoteStepper() {
         destination_city: data.destCity,
         destination_neighborhood: data.destNeighborhood || null,
         destination_address: data.destAddress || null,
-        item_category: data.category,
-        item_quantity: data.quantity || null,
-        item_notes: data.itemNotes || null,
+        item_category: firstCat,
+        item_quantity: String(itemsCount),
+        item_notes: itemsSummary + (data.itemsOtherText ? ` | Outros: ${data.itemsOtherText}` : ""),
         desired_date: data.date ? format(data.date, "yyyy-MM-dd") : null,
         period: data.period,
         needs_helpers: data.needsHelpers,
-        technical_details: data.technical || null,
+        technical_details: [
+          conditionsText(),
+          data.observations ? `Obs: ${data.observations}` : "",
+        ].filter(Boolean).join("\n") || null,
         status: "recebido",
       });
       if (error) throw error;
@@ -97,12 +255,12 @@ export function QuoteStepper() {
         `*👤 Cliente:* ${data.name}\n*📱 WhatsApp:* ${data.whatsapp}\n\n` +
         `*📍 Origem:* ${data.originCity}${data.originNeighborhood ? " — " + data.originNeighborhood : ""}${data.originAddress ? "\n   " + data.originAddress : ""}\n` +
         `*🎯 Destino:* ${data.destCity}${data.destNeighborhood ? " — " + data.destNeighborhood : ""}${data.destAddress ? "\n   " + data.destAddress : ""}\n\n` +
-        `*📦 Item:* ${CATEGORIES.find(c => c.id === data.category)?.label}${data.quantity ? " (" + data.quantity + ")" : ""}\n` +
-        (data.itemNotes ? `*📝 Obs item:* ${data.itemNotes}\n` : "") +
-        `\n*📅 Data:* ${data.date ? format(data.date, "dd/MM/yyyy", { locale: ptBR }) : "-"}\n` +
+        `*📦 Itens (${itemsCount}):*\n${itemsListText()}\n\n` +
+        `*📅 Data:* ${data.date ? format(data.date, "dd/MM/yyyy", { locale: ptBR }) : "-"}\n` +
         `*🕒 Período:* ${PERIODS.find(p => p.id === data.period)?.label}\n` +
         `*👷 Ajudantes:* ${data.needsHelpers ? "Sim (orçar separadamente)" : "Não"}\n` +
-        (data.technical ? `*🔧 Detalhes:* ${data.technical}\n` : "")
+        (data.conditions.length ? `\n*🏠 Condições do local:*\n${conditionsText()}\n` : "") +
+        (data.observations ? `\n*📝 Observações:* ${data.observations}\n` : "")
       );
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, "_blank");
       setDone(true);
@@ -121,11 +279,11 @@ export function QuoteStepper() {
         <CheckCircle2 className="w-16 h-16 mx-auto text-success mb-4" />
         <h3 className="font-display text-2xl mb-2">Cotação enviada!</h3>
         <p className="text-muted-foreground mb-6">
-          Em instantes você recebe o valor pelo WhatsApp. Caso o WhatsApp não tenha aberto, clique abaixo.
+          Em instantes você recebe o valor pelo WhatsApp.
         </p>
         <Button
           className="bg-gradient-brand text-background font-bold"
-          onClick={() => { setDone(false); setData(initial); setStep(0); }}
+          onClick={() => { setDone(false); setData(initial); setStep(0); setActiveTab(TABS[0].id); }}
         >
           Nova cotação
         </Button>
@@ -134,6 +292,7 @@ export function QuoteStepper() {
   }
 
   const progress = ((step + 1) / STEPS.length) * 100;
+  const currentTab = TABS.find(t => t.id === activeTab)!;
 
   return (
     <div className="rounded-2xl bg-card border border-border p-5 sm:p-7 shadow-card">
@@ -153,16 +312,14 @@ export function QuoteStepper() {
         </div>
       </div>
 
-      {/* Step 0: Origin/Destination */}
+      {/* Step 0 */}
       {step === 0 && (
         <div className="space-y-5 animate-in fade-in-50">
           <h3 className="font-display text-xl flex items-center gap-2"><MapPin className="text-primary" /> Origem & Destino</h3>
           <div className="grid sm:grid-cols-2 gap-5">
             {[
-              { k: "origin", title: "Origem", color: "warning" as const,
-                cityKey: "originCity", nKey: "originNeighborhood", aKey: "originAddress" },
-              { k: "dest", title: "Destino", color: "primary" as const,
-                cityKey: "destCity", nKey: "destNeighborhood", aKey: "destAddress" },
+              { k: "origin", title: "Origem", cityKey: "originCity", nKey: "originNeighborhood", aKey: "originAddress" },
+              { k: "dest", title: "Destino", cityKey: "destCity", nKey: "destNeighborhood", aKey: "destAddress" },
             ].map((b) => (
               <div key={b.k} className="stepper-block stepper-field rounded-xl bg-muted/40 p-4 space-y-3">
                 <div className="font-display text-sm tracking-widest text-primary">{b.title.toUpperCase()}</div>
@@ -192,35 +349,103 @@ export function QuoteStepper() {
         </div>
       )}
 
-      {/* Step 1: Items */}
+      {/* Step 1 — Items with tabs + counters */}
       {step === 1 && (
         <div className="space-y-5 animate-in fade-in-50">
-          <h3 className="font-display text-xl flex items-center gap-2"><Package className="text-primary" /> O que vamos transportar?</h3>
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-            {CATEGORIES.map(({ id, label, Icon }) => (
-              <button key={id} type="button" onClick={() => update("category", id)}
+          <h3 className="font-display text-xl flex items-center gap-2">
+            <Package className="text-primary" /> O que vamos transportar?
+          </h3>
+
+          {/* Tabs */}
+          <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1">
+            {TABS.map(({ id, label, Icon }) => (
+              <button
+                key={id} type="button" onClick={() => setActiveTab(id)}
                 className={cn(
-                  "flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all",
-                  data.category === id
-                    ? "border-primary bg-gradient-brand-soft shadow-glow"
-                    : "border-border bg-muted/30 hover:border-primary/50"
-                )}>
-                <Icon className={cn("w-7 h-7", data.category === id ? "text-primary" : "text-foreground")} />
-                <span className="text-xs font-bold uppercase tracking-wide">{label}</span>
+                  "flex items-center gap-2 px-3 py-2 rounded-lg whitespace-nowrap font-bold text-sm transition-all flex-shrink-0",
+                  activeTab === id
+                    ? "bg-gradient-brand text-background shadow-glow"
+                    : "bg-muted/40 text-foreground hover:brightness-125"
+                )}
+              >
+                <Icon className="w-4 h-4" /> {label}
               </button>
             ))}
           </div>
-          <div className="grid sm:grid-cols-2 gap-4">
+
+          {/* Items grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {currentTab.items.map(({ id, label, Icon }) => {
+              const qty = data.items[id] || 0;
+              const selected = qty > 0;
+              return (
+                <div key={id} className={cn(
+                  "rounded-xl border-2 p-3 flex flex-col items-center gap-2 transition-all",
+                  selected ? "border-primary bg-gradient-brand-soft shadow-glow" : "border-border bg-muted/30"
+                )}>
+                  <button type="button" onClick={() => incItem(id)}
+                    className="flex flex-col items-center gap-1 w-full">
+                    <Icon className={cn("w-8 h-8", selected ? "text-primary" : "text-foreground")} />
+                    <span className="text-xs font-bold text-center leading-tight">{label}</span>
+                  </button>
+                  {selected ? (
+                    <div className="flex items-center gap-2 mt-1">
+                      <button type="button" onClick={() => decItem(id)}
+                        className="w-7 h-7 rounded-full bg-background border border-primary grid place-content-center hover:bg-primary hover:text-background transition">
+                        <Minus className="w-3.5 h-3.5" />
+                      </button>
+                      <span className="font-bold text-base min-w-[1.5rem] text-center">{qty}</span>
+                      <button type="button" onClick={() => incItem(id)}
+                        className="w-7 h-7 rounded-full bg-background border border-primary grid place-content-center hover:bg-primary hover:text-background transition">
+                        <Plus className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ) : (
+                    <button type="button" onClick={() => incItem(id)}
+                      className="text-xs font-bold text-primary mt-1">
+                      + Adicionar
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* "Outros" free text - only if outros-livre selected */}
+          {data.items["outros-livre"] && (
             <div>
-              <Label className="text-xs">Quantidade aproximada</Label>
-              <Input className="mt-1" placeholder="Ex: 5 caixas, 1 sofá..." value={data.quantity}
-                onChange={(e) => update("quantity", e.target.value)} />
+              <Label className="text-xs">Descreva o(s) item(ns) "Outros" *</Label>
+              <Input className="mt-1" placeholder="Ex: aquário, esteira..."
+                value={data.itemsOtherText}
+                onChange={(e) => update("itemsOtherText", e.target.value)} />
             </div>
-            <div>
-              <Label className="text-xs">Observação rápida</Label>
-              <Input className="mt-1" placeholder="Algo que devamos saber" value={data.itemNotes}
-                onChange={(e) => update("itemNotes", e.target.value)} />
+          )}
+
+          {/* Summary footer */}
+          <div className="rounded-xl bg-muted/40 border border-primary/40 p-4">
+            <div className="flex items-center justify-between mb-2">
+              <div className="font-display text-sm text-primary font-bold">
+                ITENS SELECIONADOS ({itemsCount})
+              </div>
+              {itemsCount > 0 && (
+                <button type="button" onClick={() => update("items", {})}
+                  className="text-xs text-muted-foreground hover:text-destructive flex items-center gap-1">
+                  <Trash2 className="w-3 h-3" /> Limpar
+                </button>
+              )}
             </div>
+            {itemsCount === 0 ? (
+              <p className="text-xs text-muted-foreground">Nenhum item selecionado ainda. Toque nos itens acima.</p>
+            ) : (
+              <ul className="space-y-1">
+                {Object.entries(data.items).map(([id, qty]) => (
+                  <li key={id} className="text-sm flex justify-between">
+                    <span>{ALL_ITEMS[id]}</span>
+                    <span className="font-bold text-primary">{qty}x</span>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
           <Alert>
@@ -229,7 +454,7 @@ export function QuoteStepper() {
         </div>
       )}
 
-      {/* Step 2: Details */}
+      {/* Step 2 — Details */}
       {step === 2 && (
         <div className="space-y-5 animate-in fade-in-50">
           <h3 className="font-display text-xl flex items-center gap-2"><CalendarIcon className="text-primary" /> Quando?</h3>
@@ -268,6 +493,7 @@ export function QuoteStepper() {
               </div>
             </div>
           </div>
+
           <label className="flex items-start gap-3 p-4 rounded-xl bg-muted/40 border border-border cursor-pointer">
             <Checkbox checked={data.needsHelpers} onCheckedChange={(v) => update("needsHelpers", !!v)} className="mt-0.5" />
             <div>
@@ -275,17 +501,104 @@ export function QuoteStepper() {
               <div className="text-xs text-muted-foreground">O motorista não realiza carga/descarga. Será orçado separadamente.</div>
             </div>
           </label>
+
+          {/* Conditions multi-select buttons */}
           <div>
-            <Label className="text-xs">Detalhes técnicos (andar, elevador, peso, distâncias)</Label>
-            <Textarea className="mt-1" rows={3} value={data.technical} onChange={(e) => update("technical", e.target.value)} />
+            <Label className="text-xs mb-2 block">Condições do local (selecione todas que se aplicam)</Label>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {CONDITIONS.map(({ id, label }) => {
+                const sel = data.conditions.includes(id);
+                return (
+                  <button key={id} type="button" onClick={() => toggleCondition(id)}
+                    className={cn(
+                      "px-3 py-2.5 rounded-lg border-2 text-xs font-bold transition-all text-left",
+                      sel ? "border-primary bg-gradient-brand-soft text-primary shadow-glow"
+                          : "border-border bg-muted/30 hover:border-primary/50"
+                    )}>
+                    {sel ? "✓ " : ""}{label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {data.conditions.includes("outros-cond") && (
+            <div>
+              <Label className="text-xs">Descreva "Outros" condições *</Label>
+              <Input className="mt-1" value={data.conditionsOtherText}
+                onChange={(e) => update("conditionsOtherText", e.target.value)} />
+            </div>
+          )}
+
+          <div>
+            <Label className="text-xs">Observações (opcional)</Label>
+            <Textarea className="mt-1" rows={3} placeholder="Algo mais que devemos saber?"
+              value={data.observations} onChange={(e) => update("observations", e.target.value)} />
           </div>
         </div>
       )}
 
-      {/* Step 3: Contact */}
+      {/* Step 3 — Contact + Summary */}
       {step === 3 && (
         <div className="space-y-5 animate-in fade-in-50">
-          <h3 className="font-display text-xl flex items-center gap-2"><User className="text-primary" /> Seu contato</h3>
+          <h3 className="font-display text-xl flex items-center gap-2">
+            <ScrollText className="text-primary" /> Resumo do pedido
+          </h3>
+
+          <div className="rounded-xl bg-muted/40 border-2 border-primary/40 p-4 space-y-3 text-sm">
+            <div>
+              <div className="font-bold text-primary text-xs tracking-widest">📍 ORIGEM</div>
+              <div>{data.originCity}{data.originNeighborhood && ` — ${data.originNeighborhood}`}</div>
+              {data.originAddress && <div className="text-muted-foreground text-xs">{data.originAddress}</div>}
+            </div>
+            <div>
+              <div className="font-bold text-primary text-xs tracking-widest">🎯 DESTINO</div>
+              <div>{data.destCity}{data.destNeighborhood && ` — ${data.destNeighborhood}`}</div>
+              {data.destAddress && <div className="text-muted-foreground text-xs">{data.destAddress}</div>}
+            </div>
+            <div>
+              <div className="font-bold text-primary text-xs tracking-widest">📦 ITENS ({itemsCount})</div>
+              <ul className="text-xs space-y-0.5">
+                {Object.entries(data.items).map(([id, qty]) => (
+                  <li key={id}>• {qty}x {ALL_ITEMS[id]}{id === "outros-livre" && data.itemsOtherText ? `: ${data.itemsOtherText}` : ""}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <div className="font-bold text-primary text-xs tracking-widest">📅 DATA</div>
+                <div>{data.date ? format(data.date, "dd/MM/yyyy", { locale: ptBR }) : "-"}</div>
+              </div>
+              <div>
+                <div className="font-bold text-primary text-xs tracking-widest">🕒 PERÍODO</div>
+                <div>{PERIODS.find(p => p.id === data.period)?.label || "-"}</div>
+              </div>
+            </div>
+            <div>
+              <div className="font-bold text-primary text-xs tracking-widest">👷 AJUDANTES</div>
+              <div>{data.needsHelpers ? "Sim (orçado separadamente)" : "Não"}</div>
+            </div>
+            {data.conditions.length > 0 && (
+              <div>
+                <div className="font-bold text-primary text-xs tracking-widest">🏠 CONDIÇÕES</div>
+                <ul className="text-xs space-y-0.5">
+                  {data.conditions.map(c => (
+                    <li key={c}>• {CONDITIONS.find(x => x.id === c)?.label}{c === "outros-cond" && data.conditionsOtherText ? `: ${data.conditionsOtherText}` : ""}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {data.observations && (
+              <div>
+                <div className="font-bold text-primary text-xs tracking-widest">📝 OBS</div>
+                <div className="text-xs">{data.observations}</div>
+              </div>
+            )}
+          </div>
+
+          <h3 className="font-display text-xl flex items-center gap-2 pt-2">
+            <User className="text-primary" /> Seu contato
+          </h3>
           <div>
             <Label className="text-xs">Nome *</Label>
             <Input className="mt-1" value={data.name} onChange={(e) => update("name", e.target.value)} />
@@ -296,7 +609,7 @@ export function QuoteStepper() {
               onChange={(e) => update("whatsapp", e.target.value)} />
           </div>
           <Alert>
-            ⚠️ Quanto mais preciso você for, mais precisa será sua cotação. Informações incorretas podem exigir um novo orçamento ou impedir a execução do frete.
+            ⚠️ Quanto mais preciso você for, mais precisa será sua cotação.
           </Alert>
         </div>
       )}
