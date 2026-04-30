@@ -295,7 +295,7 @@ export function QuoteStepper() {
   const currentTab = TABS.find(t => t.id === activeTab)!;
 
   return (
-    <div className="rounded-2xl bg-card border border-border p-5 sm:p-7 shadow-card">
+    <div className="rounded-2xl bg-card border border-border p-4 sm:p-7 shadow-card overflow-hidden w-full max-w-full min-w-0">
       {/* Progress */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-2">
