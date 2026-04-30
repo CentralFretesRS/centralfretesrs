@@ -29,8 +29,8 @@ function Index() {
         <section id="cotacao" className="relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-brand-soft pointer-events-none" />
           <div className="container mx-auto px-4 pt-12 pb-16 relative">
-            <div className="grid lg:grid-cols-2 gap-10 items-center">
-              <div className="space-y-6">
+            <div className="grid lg:grid-cols-2 gap-10 items-center min-w-0">
+              <div className="space-y-6 min-w-0">
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-card border border-primary/30">
                   <Zap className="w-4 h-4 text-primary" />
                   <span className="text-xs font-bold tracking-widest uppercase text-primary">Cotação instantânea</span>
