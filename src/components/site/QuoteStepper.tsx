@@ -280,7 +280,7 @@ export function QuoteStepper() {
   const canNext = () => {
     if (step === 0) return data.originCity && data.destCity;
     if (step === 1) return itemsCount > 0;
-    if (step === 2) return !!data.date && !!data.period;
+    if (step === 2) return !!data.date;
     if (step === 3) return data.name.trim().length > 1 && data.whatsapp.replace(/\D/g, "").length >= 10;
     return false;
   };
@@ -574,7 +574,7 @@ export function QuoteStepper() {
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar mode="single" selected={data.date} onSelect={(d) => update("date", d)}
-                    disabled={(d) => d < new Date(new Date().setHours(0,0,0,0))}
+                    disabled={(d) => d < new Date(new Date().setHours(0,0,0,0)) || d.getDay() === 0}
                     initialFocus className="p-3 pointer-events-auto" />
                 </PopoverContent>
               </Popover>
