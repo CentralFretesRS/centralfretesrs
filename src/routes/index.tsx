@@ -22,12 +22,11 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-background">
       <Header />
-      <main className="flex-1">
+      <main className="flex-1 bg-background">
         {/* HERO */}
-        <section id="cotacao" className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-brand-soft pointer-events-none" />
+        <section id="cotacao" className="relative overflow-hidden bg-background">
           <div className="container mx-auto px-4 pt-12 pb-16 relative">
             <div className="grid lg:grid-cols-2 gap-10 items-center min-w-0">
               <div className="space-y-6 min-w-0">
