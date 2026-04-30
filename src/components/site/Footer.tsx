@@ -12,7 +12,7 @@ import { COMPANY_CITY, COMPANY_NAME } from "@/lib/config";
 
 export function Footer() {
   const [open, setOpen] = useState(false);
-  const [email, setEmail] = useState("admin@centralfretesrs.com");
+  const [email, setEmail] = useState("centraldolarcanoas@gmail.com");
   const [pwd, setPwd] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
