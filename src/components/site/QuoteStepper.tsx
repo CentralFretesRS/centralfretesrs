@@ -404,16 +404,16 @@ export function QuoteStepper() {
           <h3 className="font-display text-xl flex items-center gap-2"><MapPin className="text-primary" /> Origem & Destino</h3>
           <div className="grid sm:grid-cols-2 gap-5">
             {[
-              { k: "origin", title: "Origem", cityKey: "originCity", nKey: "originNeighborhood", aKey: "originAddress" },
-              { k: "dest", title: "Destino", cityKey: "destCity", nKey: "destNeighborhood", aKey: "destAddress" },
+              { k: "origin", title: "Origem", cityKey: "originCity", nKey: "originNeighborhood" },
+              { k: "dest", title: "Destino", cityKey: "destCity", nKey: "destNeighborhood" },
             ].map((b) => (
-              <div key={b.k} className="stepper-block stepper-field rounded-xl bg-muted/40 p-4 space-y-3">
+              <div key={b.k} className="stepper-block rounded-xl bg-muted/40 p-4 space-y-3">
                 <div className="font-display text-sm tracking-widest text-primary">{b.title.toUpperCase()}</div>
                 <div>
                   <Label className="text-xs">Cidade *</Label>
                   <Select value={data[b.cityKey as keyof FormState] as string}
                     onValueChange={(v) => update(b.cityKey as keyof FormState, v as never)}>
-                    <SelectTrigger className="mt-1"><SelectValue placeholder="Selecione" /></SelectTrigger>
+                    <SelectTrigger className="mt-1 inner-field"><SelectValue placeholder="Selecione" /></SelectTrigger>
                     <SelectContent>
                       {SERVICE_CITIES.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
                     </SelectContent>
@@ -421,13 +421,11 @@ export function QuoteStepper() {
                 </div>
                 <div>
                   <Label className="text-xs">Bairro</Label>
-                  <Input className="mt-1" value={data[b.nKey as keyof FormState] as string}
-                    onChange={(e) => update(b.nKey as keyof FormState, e.target.value as never)} />
-                </div>
-                <div>
-                  <Label className="text-xs">Endereço / referência</Label>
-                  <Input className="mt-1" value={data[b.aKey as keyof FormState] as string}
-                    onChange={(e) => update(b.aKey as keyof FormState, e.target.value as never)} />
+                  <NeighborhoodAutocomplete
+                    value={data[b.nKey as keyof FormState] as string}
+                    city={data[b.cityKey as keyof FormState] as string}
+                    onChange={(v) => update(b.nKey as keyof FormState, v as never)}
+                  />
                 </div>
               </div>
             ))}
