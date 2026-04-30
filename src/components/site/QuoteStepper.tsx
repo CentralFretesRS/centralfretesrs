@@ -132,8 +132,8 @@ const CONDITIONS = [
 const STEPS = ["Origem & Destino", "Itens", "Detalhes", "Contato"];
 
 type FormState = {
-  originCity: string; originNeighborhood: string; originAddress: string;
-  destCity: string; destNeighborhood: string; destAddress: string;
+  originCity: string; originNeighborhood: string;
+  destCity: string; destNeighborhood: string;
   items: Record<string, number>;
   itemsOtherText: string;
   date: Date | undefined; period: string;
@@ -145,8 +145,8 @@ type FormState = {
 };
 
 const initial: FormState = {
-  originCity: "", originNeighborhood: "", originAddress: "",
-  destCity: "", destNeighborhood: "", destAddress: "",
+  originCity: "", originNeighborhood: "",
+  destCity: "", destNeighborhood: "",
   items: {}, itemsOtherText: "",
   date: undefined, period: "",
   needsHelpers: false,
@@ -154,6 +154,92 @@ const initial: FormState = {
   observations: "",
   name: "", whatsapp: "",
 };
+
+// ---------- Neighborhood Autocomplete (OpenStreetMap Nominatim) ----------
+function NeighborhoodAutocomplete({
+  value, onChange, city,
+}: { value: string; onChange: (v: string) => void; city: string }) {
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const debounceRef = useRef<number | null>(null);
+  const abortRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    if (!value || value.trim().length < 2 || !city) {
+      setSuggestions([]);
+      return;
+    }
+    if (debounceRef.current) window.clearTimeout(debounceRef.current);
+    debounceRef.current = window.setTimeout(async () => {
+      try {
+        if (abortRef.current) abortRef.current.abort();
+        const ctrl = new AbortController();
+        abortRef.current = ctrl;
+        setLoading(true);
+        const q = encodeURIComponent(`${value}, ${city}, Rio Grande do Sul, Brasil`);
+        const url = `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=8&countrycodes=br&q=${q}`;
+        const res = await fetch(url, {
+          signal: ctrl.signal,
+          headers: { "Accept-Language": "pt-BR" },
+        });
+        const data = await res.json();
+        const set = new Set<string>();
+        for (const item of data || []) {
+          const a = item.address || {};
+          // Apenas resultados no RS
+          if (a.state && !/rio grande do sul/i.test(a.state)) continue;
+          // Filtrar pela cidade selecionada
+          const cityName = a.city || a.town || a.village || a.municipality || "";
+          if (city && cityName && !cityName.toLowerCase().includes(city.toLowerCase())) continue;
+          const n = a.suburb || a.neighbourhood || a.quarter || a.city_district || a.residential;
+          if (n) set.add(n);
+        }
+        setSuggestions(Array.from(set).slice(0, 6));
+        setOpen(true);
+      } catch (e: any) {
+        if (e?.name !== "AbortError") setSuggestions([]);
+      } finally {
+        setLoading(false);
+      }
+    }, 350);
+    return () => {
+      if (debounceRef.current) window.clearTimeout(debounceRef.current);
+    };
+  }, [value, city]);
+
+  return (
+    <div className="relative">
+      <Input
+        className="mt-1 neighborhood-input"
+        value={value}
+        placeholder={city ? "Digite o bairro" : "Selecione a cidade primeiro"}
+        disabled={!city}
+        onChange={(e) => { onChange(e.target.value); setOpen(true); }}
+        onFocus={() => suggestions.length && setOpen(true)}
+        onBlur={() => setTimeout(() => setOpen(false), 150)}
+        autoComplete="off"
+      />
+      {open && (suggestions.length > 0 || loading) && (
+        <div className="absolute z-50 mt-1 w-full rounded-md border border-white/30 bg-popover shadow-lg overflow-hidden">
+          {loading && (
+            <div className="px-3 py-2 text-sm text-muted-foreground">Buscando…</div>
+          )}
+          {!loading && suggestions.map((s) => (
+            <button
+              key={s}
+              type="button"
+              className="block w-full text-left px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground no-orange-border"
+              onMouseDown={(e) => { e.preventDefault(); onChange(s); setOpen(false); }}
+            >
+              {s}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function QuoteStepper() {
   const [step, setStep] = useState(0);
