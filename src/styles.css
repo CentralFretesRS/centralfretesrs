@@ -151,6 +151,16 @@
     background-color: #000000 !important;
     background-image: none !important;
   }
+  .bg-primary,
+  .bg-gradient-brand,
+  [class*="bg-[#FF8C00]"] {
+    color: #FFFFFF !important;
+  }
+  .bg-primary svg,
+  .bg-gradient-brand svg,
+  [class*="bg-[#FF8C00]"] svg {
+    color: #FFFFFF !important;
+  }
 
   /* Acessibilidade idosos: aumentar 20% fontes pequenas */
   .text-xs { font-size: 0.9rem !important; line-height: 1.35rem !important; }
