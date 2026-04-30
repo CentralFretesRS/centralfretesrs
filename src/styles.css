@@ -200,4 +200,14 @@
     border-color: #FF8C00 !important;
     border-width: 1.5px !important;
   }
+
+  /* Etapa 1 (Origem & Destino): bloco externo laranja, campos internos brancos */
+  .stepper-block .inner-field,
+  .stepper-block .neighborhood-input,
+  .stepper-block input,
+  .stepper-block [role="combobox"],
+  .stepper-block button[role="combobox"] {
+    border-color: #FFFFFF !important;
+    border-width: 1px !important;
+  }
 }

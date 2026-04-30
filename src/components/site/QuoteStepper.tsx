@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import {
@@ -132,8 +132,8 @@ const CONDITIONS = [
 const STEPS = ["Origem & Destino", "Itens", "Detalhes", "Contato"];
 
 type FormState = {
-  originCity: string; originNeighborhood: string; originAddress: string;
-  destCity: string; destNeighborhood: string; destAddress: string;
+  originCity: string; originNeighborhood: string;
+  destCity: string; destNeighborhood: string;
   items: Record<string, number>;
   itemsOtherText: string;
   date: Date | undefined; period: string;
@@ -145,8 +145,8 @@ type FormState = {
 };
 
 const initial: FormState = {
-  originCity: "", originNeighborhood: "", originAddress: "",
-  destCity: "", destNeighborhood: "", destAddress: "",
+  originCity: "", originNeighborhood: "",
+  destCity: "", destNeighborhood: "",
   items: {}, itemsOtherText: "",
   date: undefined, period: "",
   needsHelpers: false,
@@ -154,6 +154,92 @@ const initial: FormState = {
   observations: "",
   name: "", whatsapp: "",
 };
+
+// ---------- Neighborhood Autocomplete (OpenStreetMap Nominatim) ----------
+function NeighborhoodAutocomplete({
+  value, onChange, city,
+}: { value: string; onChange: (v: string) => void; city: string }) {
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const debounceRef = useRef<number | null>(null);
+  const abortRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    if (!value || value.trim().length < 2 || !city) {
+      setSuggestions([]);
+      return;
+    }
+    if (debounceRef.current) window.clearTimeout(debounceRef.current);
+    debounceRef.current = window.setTimeout(async () => {
+      try {
+        if (abortRef.current) abortRef.current.abort();
+        const ctrl = new AbortController();
+        abortRef.current = ctrl;
+        setLoading(true);
+        const q = encodeURIComponent(`${value}, ${city}, Rio Grande do Sul, Brasil`);
+        const url = `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=8&countrycodes=br&q=${q}`;
+        const res = await fetch(url, {
+          signal: ctrl.signal,
+          headers: { "Accept-Language": "pt-BR" },
+        });
+        const data = await res.json();
+        const set = new Set<string>();
+        for (const item of data || []) {
+          const a = item.address || {};
+          // Apenas resultados no RS
+          if (a.state && !/rio grande do sul/i.test(a.state)) continue;
+          // Filtrar pela cidade selecionada
+          const cityName = a.city || a.town || a.village || a.municipality || "";
+          if (city && cityName && !cityName.toLowerCase().includes(city.toLowerCase())) continue;
+          const n = a.suburb || a.neighbourhood || a.quarter || a.city_district || a.residential;
+          if (n) set.add(n);
+        }
+        setSuggestions(Array.from(set).slice(0, 6));
+        setOpen(true);
+      } catch (e: any) {
+        if (e?.name !== "AbortError") setSuggestions([]);
+      } finally {
+        setLoading(false);
+      }
+    }, 350);
+    return () => {
+      if (debounceRef.current) window.clearTimeout(debounceRef.current);
+    };
+  }, [value, city]);
+
+  return (
+    <div className="relative">
+      <Input
+        className="mt-1 neighborhood-input"
+        value={value}
+        placeholder={city ? "Digite o bairro" : "Selecione a cidade primeiro"}
+        disabled={!city}
+        onChange={(e) => { onChange(e.target.value); setOpen(true); }}
+        onFocus={() => suggestions.length && setOpen(true)}
+        onBlur={() => setTimeout(() => setOpen(false), 150)}
+        autoComplete="off"
+      />
+      {open && (suggestions.length > 0 || loading) && (
+        <div className="absolute z-50 mt-1 w-full rounded-md border border-white/30 bg-popover shadow-lg overflow-hidden">
+          {loading && (
+            <div className="px-3 py-2 text-sm text-muted-foreground">Buscando…</div>
+          )}
+          {!loading && suggestions.map((s) => (
+            <button
+              key={s}
+              type="button"
+              className="block w-full text-left px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground no-orange-border"
+              onMouseDown={(e) => { e.preventDefault(); onChange(s); setOpen(false); }}
+            >
+              {s}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function QuoteStepper() {
   const [step, setStep] = useState(0);
@@ -232,10 +318,10 @@ export function QuoteStepper() {
         whatsapp: data.whatsapp,
         origin_city: data.originCity,
         origin_neighborhood: data.originNeighborhood || null,
-        origin_address: data.originAddress || null,
+        origin_address: null,
         destination_city: data.destCity,
         destination_neighborhood: data.destNeighborhood || null,
-        destination_address: data.destAddress || null,
+        destination_address: null,
         item_category: firstCat,
         item_quantity: String(itemsCount),
         item_notes: itemsSummary + (data.itemsOtherText ? ` | Outros: ${data.itemsOtherText}` : ""),
@@ -253,8 +339,8 @@ export function QuoteStepper() {
       const msg = encodeURIComponent(
         `*🚚 NOVA COTAÇÃO — Central Fretes RS*\n\n` +
         `*👤 Cliente:* ${data.name}\n*📱 WhatsApp:* ${data.whatsapp}\n\n` +
-        `*📍 Origem:* ${data.originCity}${data.originNeighborhood ? " — " + data.originNeighborhood : ""}${data.originAddress ? "\n   " + data.originAddress : ""}\n` +
-        `*🎯 Destino:* ${data.destCity}${data.destNeighborhood ? " — " + data.destNeighborhood : ""}${data.destAddress ? "\n   " + data.destAddress : ""}\n\n` +
+        `*📍 Origem:* ${data.originCity}${data.originNeighborhood ? " — " + data.originNeighborhood : ""}\n` +
+        `*🎯 Destino:* ${data.destCity}${data.destNeighborhood ? " — " + data.destNeighborhood : ""}\n\n` +
         `*📦 Itens (${itemsCount}):*\n${itemsListText()}\n\n` +
         `*📅 Data:* ${data.date ? format(data.date, "dd/MM/yyyy", { locale: ptBR }) : "-"}\n` +
         `*🕒 Período:* ${PERIODS.find(p => p.id === data.period)?.label}\n` +
@@ -318,16 +404,16 @@ export function QuoteStepper() {
           <h3 className="font-display text-xl flex items-center gap-2"><MapPin className="text-primary" /> Origem & Destino</h3>
           <div className="grid sm:grid-cols-2 gap-5">
             {[
-              { k: "origin", title: "Origem", cityKey: "originCity", nKey: "originNeighborhood", aKey: "originAddress" },
-              { k: "dest", title: "Destino", cityKey: "destCity", nKey: "destNeighborhood", aKey: "destAddress" },
+              { k: "origin", title: "Origem", cityKey: "originCity", nKey: "originNeighborhood" },
+              { k: "dest", title: "Destino", cityKey: "destCity", nKey: "destNeighborhood" },
             ].map((b) => (
-              <div key={b.k} className="stepper-block stepper-field rounded-xl bg-muted/40 p-4 space-y-3">
+              <div key={b.k} className="stepper-block rounded-xl bg-muted/40 p-4 space-y-3">
                 <div className="font-display text-sm tracking-widest text-primary">{b.title.toUpperCase()}</div>
                 <div>
                   <Label className="text-xs">Cidade *</Label>
                   <Select value={data[b.cityKey as keyof FormState] as string}
                     onValueChange={(v) => update(b.cityKey as keyof FormState, v as never)}>
-                    <SelectTrigger className="mt-1"><SelectValue placeholder="Selecione" /></SelectTrigger>
+                    <SelectTrigger className="mt-1 inner-field"><SelectValue placeholder="Selecione" /></SelectTrigger>
                     <SelectContent>
                       {SERVICE_CITIES.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
                     </SelectContent>
@@ -335,13 +421,11 @@ export function QuoteStepper() {
                 </div>
                 <div>
                   <Label className="text-xs">Bairro</Label>
-                  <Input className="mt-1" value={data[b.nKey as keyof FormState] as string}
-                    onChange={(e) => update(b.nKey as keyof FormState, e.target.value as never)} />
-                </div>
-                <div>
-                  <Label className="text-xs">Endereço / referência</Label>
-                  <Input className="mt-1" value={data[b.aKey as keyof FormState] as string}
-                    onChange={(e) => update(b.aKey as keyof FormState, e.target.value as never)} />
+                  <NeighborhoodAutocomplete
+                    value={data[b.nKey as keyof FormState] as string}
+                    city={data[b.cityKey as keyof FormState] as string}
+                    onChange={(v) => update(b.nKey as keyof FormState, v as never)}
+                  />
                 </div>
               </div>
             ))}
@@ -569,12 +653,10 @@ export function QuoteStepper() {
             <div>
               <div className="font-bold text-primary text-xs tracking-widest">📍 ORIGEM</div>
               <div>{data.originCity}{data.originNeighborhood && ` — ${data.originNeighborhood}`}</div>
-              {data.originAddress && <div className="text-muted-foreground text-xs">{data.originAddress}</div>}
             </div>
             <div>
               <div className="font-bold text-primary text-xs tracking-widest">🎯 DESTINO</div>
               <div>{data.destCity}{data.destNeighborhood && ` — ${data.destNeighborhood}`}</div>
-              {data.destAddress && <div className="text-muted-foreground text-xs">{data.destAddress}</div>}
             </div>
             <div>
               <div className="font-bold text-primary text-xs tracking-widest">📦 ITENS ({itemsCount})</div>
