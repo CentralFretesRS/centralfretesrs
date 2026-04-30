@@ -373,8 +373,11 @@ export function QuoteStepper() {
             ))}
           </div>
 
-          {/* Items grid */}
-          <div className="items-grid grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+          {/* Items grid — 2 columns mobile, 3 on tablet+ */}
+          <div
+            className="items-grid gap-2.5"
+            style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}
+          >
             {currentTab.items.map(({ id, label, Icon }) => {
               const qty = data.items[id] || 0;
               const selected = qty > 0;
@@ -383,38 +386,42 @@ export function QuoteStepper() {
                   key={id}
                   data-selected={selected ? "true" : "false"}
                   className={cn(
-                    "item-card rounded-lg p-2.5 flex flex-col items-center gap-1.5 transition-all bg-black/60"
+                    "item-card rounded-lg p-3 flex flex-col items-center justify-between gap-1.5 transition-all bg-black"
                   )}
+                  style={{ maxHeight: 140, minHeight: 130 }}
                 >
-                  <Icon className={cn("w-6 h-6", selected ? "text-primary" : "text-muted-foreground")} />
-                  <span className="text-[0.78rem] font-medium text-center leading-tight text-foreground/90 min-h-[2.2em]">
+                  <Icon className={cn("w-6 h-6 shrink-0", selected ? "text-primary" : "text-muted-foreground")} />
+                  <span
+                    className="font-semibold text-center leading-tight text-foreground"
+                    style={{ fontSize: "1.125rem", lineHeight: 1.15 }}
+                  >
                     {label}
                   </span>
                   {selected ? (
-                    <div className="flex items-center gap-1.5 mt-0.5">
+                    <div className="flex items-center gap-2">
                       <button
                         type="button"
                         onClick={() => decItem(id)}
-                        className="counter-btn w-6 h-6 rounded-full bg-black grid place-content-center text-primary hover:bg-primary hover:text-background transition"
+                        className="counter-btn w-7 h-7 rounded-full bg-black grid place-content-center text-primary hover:bg-primary hover:text-background transition"
                         aria-label="Diminuir"
                       >
-                        <Minus className="w-3 h-3" />
+                        <Minus className="w-3.5 h-3.5" />
                       </button>
-                      <span className="font-bold text-sm min-w-[1.2rem] text-center text-primary">{qty}</span>
+                      <span className="font-bold text-base min-w-[1.2rem] text-center text-primary">{qty}</span>
                       <button
                         type="button"
                         onClick={() => incItem(id)}
-                        className="counter-btn w-6 h-6 rounded-full bg-black grid place-content-center text-primary hover:bg-primary hover:text-background transition"
+                        className="counter-btn w-7 h-7 rounded-full bg-black grid place-content-center text-primary hover:bg-primary hover:text-background transition"
                         aria-label="Aumentar"
                       >
-                        <Plus className="w-3 h-3" />
+                        <Plus className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   ) : (
                     <button
                       type="button"
                       onClick={() => incItem(id)}
-                      className="text-[0.72rem] font-bold text-primary mt-0.5 px-2 py-0.5 rounded hover:bg-primary/10 transition"
+                      className="text-xs font-bold text-primary px-2 py-1 rounded hover:bg-primary/10 transition"
                     >
                       + Adicionar
                     </button>
