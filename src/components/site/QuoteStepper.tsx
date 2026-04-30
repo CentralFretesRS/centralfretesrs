@@ -362,7 +362,7 @@ export function QuoteStepper() {
 
   if (done) {
     return (
-      <div className="rounded-2xl bg-card border border-border p-8 text-center shadow-card">
+    <div className="rounded-2xl bg-card border border-border p-8 text-center shadow-card">
         <CheckCircle2 className="w-16 h-16 mx-auto text-success mb-4" />
         <h3 className="font-display text-2xl mb-2">Cotação enviada!</h3>
         <p className="text-muted-foreground mb-6">
@@ -408,7 +408,7 @@ export function QuoteStepper() {
               { k: "origin", title: "Origem", cityKey: "originCity", nKey: "originNeighborhood" },
               { k: "dest", title: "Destino", cityKey: "destCity", nKey: "destNeighborhood" },
             ].map((b) => (
-              <div key={b.k} className="stepper-block rounded-xl bg-muted/40 p-4 space-y-3">
+              <div key={b.k} className="stepper-block rounded-xl bg-background p-4 space-y-3">
                 <div className="font-display text-sm tracking-widest text-primary">{b.title.toUpperCase()}</div>
                 <div>
                   <Label className="text-xs">Cidade *</Label>
@@ -527,7 +527,7 @@ export function QuoteStepper() {
           )}
 
           {/* Summary footer */}
-          <div className="rounded-xl bg-muted/40 border border-primary/40 p-4">
+          <div className="rounded-xl bg-background border border-primary/40 p-4">
             <div className="flex items-center justify-between mb-2">
               <div className="font-display text-sm text-primary font-bold">
                 ITENS SELECIONADOS ({itemsCount})
@@ -601,8 +601,8 @@ export function QuoteStepper() {
                     className={cn(
                       "flex flex-col items-center gap-1 py-3 rounded-lg border-2 transition-all",
                       data.period === id
-                        ? "border-primary bg-gradient-brand-soft"
-                        : "border-border bg-muted/30 hover:border-primary/50"
+                        ? "border-primary bg-background"
+                        : "border-border bg-background hover:border-primary/50"
                     )}>
                     <Icon className="w-5 h-5" />
                     <span className="text-xs font-bold">{label}</span>
@@ -612,7 +612,7 @@ export function QuoteStepper() {
             </div>
           </div>
 
-          <label className="flex items-start gap-3 p-4 rounded-xl bg-muted/40 border border-border cursor-pointer">
+          <label className="flex items-start gap-3 p-4 rounded-xl bg-background border border-border cursor-pointer">
             <Checkbox checked={data.needsHelpers} onCheckedChange={(v) => update("needsHelpers", !!v)} className="mt-0.5" />
             <div>
               <div className="font-bold text-sm">Preciso de ajudantes</div>
@@ -630,8 +630,8 @@ export function QuoteStepper() {
                   <button key={id} type="button" onClick={() => toggleCondition(id)}
                     className={cn(
                       "px-3 py-2.5 rounded-lg border-2 text-xs font-bold transition-all text-left",
-                      sel ? "border-primary bg-gradient-brand-soft text-primary shadow-glow"
-                          : "border-border bg-muted/30 hover:border-primary/50"
+                      sel ? "border-primary bg-background text-primary shadow-glow"
+                          : "border-border bg-background hover:border-primary/50"
                     )}>
                     {sel ? "✓ " : ""}{label}
                   </button>
@@ -663,7 +663,7 @@ export function QuoteStepper() {
             <ScrollText className="text-primary" /> Resumo do pedido
           </h3>
 
-          <div className="rounded-xl bg-muted/40 border-2 border-primary/40 p-4 space-y-3 text-sm">
+          <div className="rounded-xl bg-background border-2 border-primary/40 p-4 space-y-3 text-sm">
             <div>
               <div className="font-bold text-primary text-xs tracking-widest">📍 ORIGEM</div>
               <div>{data.originCity}{data.originNeighborhood && ` — ${data.originNeighborhood}`}</div>
@@ -753,7 +753,7 @@ export function QuoteStepper() {
 
 function Alert({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex gap-2 p-3 rounded-lg bg-warning/10 border border-warning/30 text-xs text-warning-foreground/90">
+    <div className="flex gap-2 p-3 rounded-lg bg-background border border-warning/30 text-xs text-warning-foreground/90">
       <AlertTriangle className="w-4 h-4 flex-shrink-0 text-warning mt-0.5" />
       <div>{children}</div>
     </div>
