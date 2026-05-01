@@ -213,8 +213,7 @@ function NeighborhoodAutocomplete({
       <Input
         className="mt-1 neighborhood-input"
         value={value}
-        placeholder={city ? "Digite o bairro" : "Selecione a cidade primeiro"}
-        disabled={!city}
+        placeholder="Digite o bairro"
         onChange={(e) => { onChange(e.target.value); setOpen(true); }}
         onFocus={() => suggestions.length && setOpen(true)}
         onBlur={() => setTimeout(() => setOpen(false), 150)}
@@ -251,6 +250,14 @@ export function QuoteStepper() {
 
   const update = <K extends keyof FormState>(k: K, v: FormState[K]) =>
     setData((d) => ({ ...d, [k]: v }));
+
+  const updateCity = (cityKey: "originCity" | "destCity", neighborhoodKey: "originNeighborhood" | "destNeighborhood", value: string) => {
+    setData((d) => ({
+      ...d,
+      [cityKey]: value,
+      [neighborhoodKey]: d[cityKey] === value ? d[neighborhoodKey] : "",
+    }));
+  };
 
   const setItemQty = (id: string, qty: number) => {
     setData((d) => {
@@ -404,11 +411,13 @@ export function QuoteStepper() {
         <div className="space-y-5 animate-in fade-in-50">
           <h3 className="font-display text-xl flex items-center gap-2"><MapPin className="text-primary" /> Origem & Destino</h3>
           <div className="grid sm:grid-cols-2 gap-5">
-            {[
-              { k: "origin", title: "Origem", cityKey: "originCity", nKey: "originNeighborhood" },
-              { k: "dest", title: "Destino", cityKey: "destCity", nKey: "destNeighborhood" },
+              {[
+                { k: "origin", title: "Origem", cityKey: "originCity", nKey: "originNeighborhood" },
+                { k: "dest", title: "Destino", cityKey: "destCity", nKey: "destNeighborhood" },
             ].map((b) => {
-              const selectedCity = data[b.cityKey as keyof FormState] as string;
+              const cityKey = b.cityKey as "originCity" | "destCity";
+              const neighborhoodKey = b.nKey as "originNeighborhood" | "destNeighborhood";
+              const selectedCity = data[cityKey];
               const hasCity = !!selectedCity;
               return (
               <div key={b.k} className="stepper-block rounded-xl bg-background p-4 space-y-3">
@@ -418,7 +427,9 @@ export function QuoteStepper() {
                   <div className="relative mt-1">
                     <select
                       value={selectedCity}
-                      onChange={(e) => update(b.cityKey as keyof FormState, e.target.value as never)}
+                      onChange={(e) => updateCity(cityKey, neighborhoodKey, e.currentTarget.value)}
+                      onInput={(e) => updateCity(cityKey, neighborhoodKey, e.currentTarget.value)}
+                      onBlur={(e) => updateCity(cityKey, neighborhoodKey, e.currentTarget.value)}
                       className={cn(
                         "w-full appearance-none rounded-lg px-4 py-3 text-base font-semibold bg-background text-foreground cursor-pointer transition-all duration-150 focus:outline-none",
                         "border-2 no-orange-border",
@@ -441,9 +452,9 @@ export function QuoteStepper() {
                 <div>
                   <Label className="text-xs">Bairro</Label>
                   <NeighborhoodAutocomplete
-                    value={data[b.nKey as keyof FormState] as string}
-                    city={data[b.cityKey as keyof FormState] as string}
-                    onChange={(v) => update(b.nKey as keyof FormState, v as never)}
+                    value={data[neighborhoodKey]}
+                    city={selectedCity}
+                    onChange={(v) => update(neighborhoodKey, v)}
                   />
                 </div>
               </div>
