@@ -60,11 +60,31 @@ export function Footer() {
           </button>
           <p className="text-xs text-muted-foreground">© 2025 {COMPANY_NAME}</p>
         </div>
-        <p className="mt-6 text-xs text-muted-foreground/80 leading-relaxed text-center max-w-3xl mx-auto">
-          Central Fretes RS — Especialistas em fretes e mudanças em Canoas, Porto Alegre,
-          Grande Porto Alegre, Litoral Gaúcho e Interior do Rio Grande do Sul.
-          Mais de 10 anos de experiência.
-        </p>
+        <div className="mt-6 text-xs text-muted-foreground/80 leading-relaxed text-center max-w-4xl mx-auto space-y-2">
+          <p>
+            <strong className="text-primary">Central Fretes RS</strong> — Especialistas em fretes e mudanças em
+            Canoas, Porto Alegre, Grande Porto Alegre, Litoral Gaúcho, Serra e Interior do
+            Rio Grande do Sul. Mais de 10 anos de experiência.
+          </p>
+          <p>
+            <strong className="text-foreground">Grande Porto Alegre:</strong> Porto Alegre, Canoas, Novo Hamburgo,
+            São Leopoldo, Gravataí, Viamão, Alvorada, Cachoeirinha, Esteio, Sapucaia do Sul, Guaíba.
+          </p>
+          <p>
+            <strong className="text-foreground">Litoral Gaúcho:</strong> Tramandaí, Imbé, Capão da Canoa, Torres,
+            Osório, Cidreira, Balneário Pinhal, Xangri-lá.
+          </p>
+          <p>
+            <strong className="text-foreground">Serra Gaúcha:</strong> Caxias do Sul, Bento Gonçalves, Gramado, Canela.
+          </p>
+          <p>
+            <strong className="text-foreground">Interior do RS:</strong> Santa Maria, Passo Fundo, Pelotas,
+            Rio Grande, Uruguaiana, Bagé, Santa Cruz do Sul.
+          </p>
+          <p className="pt-1 text-muted-foreground/60">
+            Frete, mudança e fretes compartilhados para todas as cidades atendidas.
+          </p>
+        </div>
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
