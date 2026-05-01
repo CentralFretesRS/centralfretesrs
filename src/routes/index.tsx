@@ -8,12 +8,37 @@ import { ThemedSections } from "@/components/site/ThemedSections";
 import { Zap } from "lucide-react";
 import { COMPANY_TAGLINE } from "@/lib/config";
 
+const SERVED_CITIES = [
+  // Grande Porto Alegre
+  "Porto Alegre", "Canoas", "Novo Hamburgo", "São Leopoldo", "Gravataí",
+  "Viamão", "Alvorada", "Cachoeirinha", "Esteio", "Sapucaia do Sul", "Guaíba",
+  // Litoral
+  "Tramandaí", "Imbé", "Capão da Canoa", "Torres", "Osório", "Cidreira",
+  "Balneário Pinhal", "Xangri-lá",
+  // Serra
+  "Caxias do Sul", "Bento Gonçalves", "Gramado", "Canela",
+  // Interior
+  "Santa Maria", "Passo Fundo", "Pelotas", "Rio Grande", "Uruguaiana",
+  "Bagé", "Santa Cruz do Sul",
+];
+
+const KEYWORDS = [
+  "frete Canoas", "mudança Canoas", "frete Porto Alegre", "mudança Porto Alegre",
+  "frete litoral RS", "frete interior RS", "fretes compartilhados RS",
+  "mudança residencial RS", "frete barato RS",
+  ...SERVED_CITIES.flatMap((c) => [
+    `frete ${c}`,
+    `mudança ${c}`,
+    `fretes compartilhados ${c}`,
+  ]),
+].join(", ");
+
 const localBusinessJsonLd = {
   "@context": "https://schema.org",
   "@type": "MovingCompany",
   name: "Central Fretes RS",
   description:
-    "Fretes e mudanças em Canoas, Porto Alegre, Grande Porto Alegre, Litoral Gaúcho e Interior do Rio Grande do Sul.",
+    "Fretes e mudanças em Canoas, Porto Alegre, Grande Porto Alegre, Litoral Gaúcho, Serra e Interior do Rio Grande do Sul.",
   url: "https://centraldefretesrs.lovable.app/",
   telephone: "+55-51-99733-7388",
   address: {
@@ -24,8 +49,11 @@ const localBusinessJsonLd = {
   },
   areaServed: [
     { "@type": "State", name: "Rio Grande do Sul" },
-    { "@type": "City", name: "Canoas" },
-    { "@type": "City", name: "Porto Alegre" },
+    ...SERVED_CITIES.map((name) => ({
+      "@type": "City",
+      name,
+      containedInPlace: { "@type": "State", name: "Rio Grande do Sul" },
+    })),
   ],
   priceRange: "$$",
 };
@@ -53,6 +81,7 @@ export const Route = createFileRoute("/")({
     meta: [
       { title: "Central Fretes RS — Frete e Mudança em Canoas Porto Alegre Litoral e todo o RS" },
       { name: "description", content: "Solicite seu frete ou mudança em segundos. Atendemos Canoas, Porto Alegre, litoral e interior do RS. Orçamento grátis pelo WhatsApp!" },
+      { name: "keywords", content: KEYWORDS },
       { property: "og:title", content: "Central Fretes RS — Frete e Mudança em Canoas Porto Alegre Litoral e todo o RS" },
       { property: "og:description", content: "Solicite seu frete ou mudança em segundos. Atendemos Canoas, Porto Alegre, litoral e interior do RS. Orçamento grátis pelo WhatsApp!" },
     ],
