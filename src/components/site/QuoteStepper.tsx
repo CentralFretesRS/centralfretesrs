@@ -213,8 +213,7 @@ function NeighborhoodAutocomplete({
       <Input
         className="mt-1 neighborhood-input"
         value={value}
-        placeholder={city ? "Digite o bairro" : "Selecione a cidade primeiro"}
-        disabled={!city}
+        placeholder="Digite o bairro"
         onChange={(e) => { onChange(e.target.value); setOpen(true); }}
         onFocus={() => suggestions.length && setOpen(true)}
         onBlur={() => setTimeout(() => setOpen(false), 150)}
