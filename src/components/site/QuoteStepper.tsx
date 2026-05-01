@@ -407,18 +407,36 @@ export function QuoteStepper() {
             {[
               { k: "origin", title: "Origem", cityKey: "originCity", nKey: "originNeighborhood" },
               { k: "dest", title: "Destino", cityKey: "destCity", nKey: "destNeighborhood" },
-            ].map((b) => (
+            ].map((b) => {
+              const selectedCity = data[b.cityKey as keyof FormState] as string;
+              const hasCity = !!selectedCity;
+              return (
               <div key={b.k} className="stepper-block rounded-xl bg-background p-4 space-y-3">
                 <div className="font-display text-sm tracking-widest text-primary">{b.title.toUpperCase()}</div>
                 <div>
                   <Label className="text-xs">Cidade *</Label>
-                  <Select value={data[b.cityKey as keyof FormState] as string}
-                    onValueChange={(v) => update(b.cityKey as keyof FormState, v as never)}>
-                    <SelectTrigger className="mt-1 inner-field"><SelectValue placeholder="Selecione" /></SelectTrigger>
-                    <SelectContent>
-                      {SERVICE_CITIES.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
+                  <div className="relative mt-1">
+                    <select
+                      value={selectedCity}
+                      onChange={(e) => update(b.cityKey as keyof FormState, e.target.value as never)}
+                      className={cn(
+                        "w-full appearance-none rounded-lg px-4 py-3 text-base font-semibold bg-background text-foreground cursor-pointer transition-all duration-150 focus:outline-none",
+                        "border-2 no-orange-border",
+                        hasCity
+                          ? "border-primary text-primary shadow-[0_4px_0_0_#FF8C00,0_6px_12px_-2px_rgba(255,140,0,0.5)] -translate-y-[2px]"
+                          : "border-white/40 shadow-[0_3px_0_0_rgba(255,255,255,0.2)]"
+                      )}
+                      style={{ WebkitAppearance: "none", MozAppearance: "none" }}
+                    >
+                      <option value="" disabled>Selecione a cidade</option>
+                      {SERVICE_CITIES.map(c => (
+                        <option key={c} value={c} style={{ background: "#000", color: "#fff" }}>{c}</option>
+                      ))}
+                    </select>
+                    <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-primary">
+                      {hasCity ? <CheckCircle2 className="w-5 h-5" /> : <ArrowRight className="w-4 h-4 rotate-90" />}
+                    </div>
+                  </div>
                 </div>
                 <div>
                   <Label className="text-xs">Bairro</Label>
@@ -429,7 +447,8 @@ export function QuoteStepper() {
                   />
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
