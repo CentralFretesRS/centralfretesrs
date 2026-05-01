@@ -40,8 +40,8 @@ const sections: Section[] = [
   },
   {
     id: "rs-inteiro",
-    title: "RS Inteiro",
-    text: "Atendemos toda a região metropolitana, litoral e interior do Rio Grande do Sul.",
+    title: "Área de Atuação",
+    text: "Atendemos toda a região metropolitana de Porto Alegre, litoral gaúcho e interior do Rio Grande do Sul.",
     images: [
       { src: rsImg, alt: "Mapa 3D do Rio Grande do Sul" },
     ],

@@ -60,6 +60,11 @@ export function Footer() {
           </button>
           <p className="text-xs text-muted-foreground">© 2025 {COMPANY_NAME}</p>
         </div>
+        <p className="mt-6 text-xs text-muted-foreground/80 leading-relaxed text-center max-w-3xl mx-auto">
+          Central Fretes RS — Especialistas em fretes e mudanças em Canoas, Porto Alegre,
+          Grande Porto Alegre, Litoral Gaúcho e Interior do Rio Grande do Sul.
+          Mais de 10 anos de experiência.
+        </p>
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
