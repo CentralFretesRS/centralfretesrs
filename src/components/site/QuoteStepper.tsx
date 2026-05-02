@@ -618,11 +618,13 @@ export function QuoteStepper() {
               <Label className="text-xs">Período *</Label>
               <div className="grid grid-cols-3 gap-2 mt-1">
                 {PERIODS.map(({ id, label, Icon }) => (
-                  <button key={id} type="button" onClick={() => update("period", id)}
+                  <button key={id} type="button"
+                    aria-pressed={data.period === id}
+                    onClick={() => update("period", id)}
                     className={cn(
-                      "flex flex-col items-center gap-1 py-3 rounded-lg border-2 transition-all",
+                      "flex flex-col items-center gap-1 py-3 rounded-lg border-2 transition-all cursor-pointer",
                       data.period === id
-                        ? "border-primary bg-background"
+                        ? "border-primary bg-primary text-black shadow-glow"
                         : "border-border bg-background hover:border-primary/50"
                     )}>
                     <Icon className="w-5 h-5" />
