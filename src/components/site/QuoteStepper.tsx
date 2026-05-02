@@ -613,15 +613,6 @@ export function QuoteStepper() {
                     initialFocus className="p-3 pointer-events-auto" />
                 </PopoverContent>
               </Popover>
-              {data.date && (
-                <Button
-                  type="button"
-                  className="mt-3 w-full bg-gradient-brand text-white font-bold shadow-glow"
-                  onClick={() => setStep(3)}
-                >
-                  Confirmar Data
-                </Button>
-              )}
             </div>
             <div>
               <Label className="text-xs">Período *</Label>
