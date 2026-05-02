@@ -783,7 +783,7 @@ export function QuoteStepper() {
 
 function Alert({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex gap-2 p-3 rounded-lg bg-background border border-warning/30 text-xs text-warning-foreground/90">
+    <div className="flex gap-2 p-3 rounded-lg bg-background border border-warning/30 text-xs text-white">
       <AlertTriangle className="w-4 h-4 flex-shrink-0 text-warning mt-0.5" />
       <div>{children}</div>
     </div>
