@@ -3,7 +3,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import {
   MapPin, Package, Calendar as CalendarIcon, User, ArrowLeft, ArrowRight,
-  Sun, CloudSun, Moon, Send, AlertTriangle, CheckCircle2,
+  Sun, CloudSun, Shuffle, Send, AlertTriangle, CheckCircle2,
   Sofa, Armchair, Tv, Refrigerator, Microwave, Bed, Shirt, Flame,
   Wind, WashingMachine, Flower2, TreePine, Briefcase, Monitor, Printer,
   Server, Box, Bike, MoreHorizontal, Plus, Minus, Trash2,
@@ -116,7 +116,7 @@ const ALL_ITEMS: Record<string, string> = TABS.flatMap(t => t.items).reduce(
 const PERIODS = [
   { id: "manha", label: "Manhã", Icon: Sun },
   { id: "tarde", label: "Tarde", Icon: CloudSun },
-  { id: "noite", label: "Noite", Icon: Moon },
+  { id: "indiferente", label: "Indiferente", Icon: Shuffle },
 ];
 
 const CONDITIONS = [
@@ -288,7 +288,7 @@ export function QuoteStepper() {
   const canNext = () => {
     if (step === 0) return data.originCity && data.destCity;
     if (step === 1) return itemsCount > 0;
-    if (step === 2) return !!data.date;
+    if (step === 2) return !!data.date && !!data.period;
     if (step === 3) return data.name.trim().length > 1 && data.whatsapp.replace(/\D/g, "").length >= 10;
     return false;
   };
