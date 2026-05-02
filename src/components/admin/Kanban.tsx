@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ChevronRight, ChevronLeft, ExternalLink, Eye, MapPin, Calendar, MessageCircle, Filter, X } from "lucide-react";
+import { ChevronRight, ChevronLeft, ExternalLink, Eye, MapPin, Calendar, MessageCircle, Filter, X, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { WHATSAPP_NUMBER } from "@/lib/config";
 import { cn } from "@/lib/utils";
@@ -113,6 +113,13 @@ export function Kanban({ onNew }: { onNew?: () => void }) {
     setFinModal(null); setAmount(""); setCommission("10"); setDriver(""); setPmethod("pix"); setPstatus("pendente");
   };
 
+  const removeQuote = async (q: Quote) => {
+    if (!confirm("Tem certeza que deseja apagar este orçamento?")) return;
+    const { error } = await supabase.from("quotes").delete().eq("id", q.id);
+    if (error) toast.error(error.message);
+    else toast.success("Orçamento apagado");
+  };
+
   return (
     <div>
       {/* Filters */}
@@ -159,7 +166,10 @@ export function Kanban({ onNew }: { onNew?: () => void }) {
                           <div className="text-[10px] text-muted-foreground font-mono">#{q.id.slice(0, 8)}</div>
                           <div className="font-bold text-sm truncate">{q.client_name}</div>
                         </div>
-                        <button onClick={() => setSelected(q)} className="text-muted-foreground hover:text-primary"><Eye className="w-4 h-4" /></button>
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          <button onClick={() => setSelected(q)} className="text-muted-foreground hover:text-primary" title="Ver detalhes"><Eye className="w-4 h-4" /></button>
+                          <button onClick={() => removeQuote(q)} className="text-muted-foreground hover:text-destructive" title="Apagar orçamento"><Trash2 className="w-4 h-4" /></button>
+                        </div>
                       </div>
                       <div className="text-xs text-muted-foreground mt-1 flex items-center gap-1"><MapPin className="w-3 h-3" />{q.origin_city} → {q.destination_city}</div>
                       {q.desired_date && <div className="text-xs text-muted-foreground flex items-center gap-1"><Calendar className="w-3 h-3" />{format(new Date(q.desired_date + "T12:00"), "dd/MM/yy", { locale: ptBR })} {q.period}</div>}

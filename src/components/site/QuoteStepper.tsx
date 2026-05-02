@@ -471,16 +471,16 @@ export function QuoteStepper() {
             <Package className="text-primary" /> O que vamos transportar?
           </h3>
 
-          {/* Tabs */}
-          <div className="items-tabs flex gap-1.5 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-thin">
+          {/* Tabs — wrap em várias linhas no mobile para não esconder áreas */}
+          <div className="items-tabs flex flex-wrap gap-1.5 pb-2">
             {TABS.map(({ id, label, Icon }) => (
               <button
                 key={id} type="button" onClick={() => setActiveTab(id)}
                 className={cn(
-                  "flex items-center gap-1.5 px-2.5 py-1.5 rounded-md whitespace-nowrap font-semibold text-xs transition-all flex-shrink-0",
+                  "flex items-center gap-1.5 px-2.5 py-1.5 rounded-md whitespace-nowrap font-semibold text-xs transition-all",
                   activeTab === id
                     ? "bg-primary text-white"
-                    : "bg-black/40 text-muted-foreground hover:text-foreground"
+                    : "bg-black/40 text-muted-foreground hover:text-foreground border border-white/10"
                 )}
               >
                 <Icon className="w-3.5 h-3.5" /> {label}

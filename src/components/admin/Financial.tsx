@@ -58,9 +58,9 @@ export function Financial() {
   };
 
   const remove = async (id: string) => {
-    if (!confirm("Excluir lançamento?")) return;
+    if (!confirm("Tem certeza que deseja apagar este lançamento?")) return;
     const { error } = await supabase.from("financials").delete().eq("id", id);
-    if (error) toast.error(error.message); else load();
+    if (error) toast.error(error.message); else { toast.success("Lançamento apagado"); load(); }
   };
 
   return (
