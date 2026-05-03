@@ -578,14 +578,18 @@ export function QuoteStepper() {
                   key={id}
                   data-selected={selected ? "true" : "false"}
                   className={cn(
-                    "item-card rounded-lg p-3 flex flex-col items-center justify-between gap-1.5 transition-all bg-black min-w-0 w-full overflow-hidden"
+                    "item-card select-none rounded-lg p-3 flex flex-col items-center justify-between gap-1.5 transition-all bg-black min-w-0 w-full overflow-hidden"
                   )}
-                  style={{ maxHeight: 140, minHeight: 130 }}
+                  style={{ maxHeight: 140, minHeight: 130, userSelect: "none", WebkitUserSelect: "none" }}
+                  onMouseDown={(e) => {
+                    // Prevent text selection on rapid taps/clicks
+                    if ((e.target as HTMLElement).tagName !== "BUTTON") e.preventDefault();
+                  }}
                 >
-                  <Icon className={cn("w-6 h-6 shrink-0", selected ? "text-primary" : "text-muted-foreground")} />
+                  <Icon className={cn("w-6 h-6 shrink-0 pointer-events-none", selected ? "text-primary" : "text-muted-foreground")} />
                   <span
-                    className="font-semibold text-center leading-tight text-foreground"
-                    style={{ fontSize: "1.125rem", lineHeight: 1.15 }}
+                    className="font-semibold text-center leading-tight text-foreground select-none pointer-events-none"
+                    style={{ fontSize: "1.125rem", lineHeight: 1.15, userSelect: "none", WebkitUserSelect: "none" }}
                   >
                     {label}
                   </span>
