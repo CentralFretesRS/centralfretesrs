@@ -120,12 +120,9 @@ const PERIODS = [
 ];
 
 const CONDITIONS = [
-  { id: "escada", label: "Tem escada" },
-  { id: "elevador", label: "Tem elevador" },
   { id: "fragil", label: "Itens frágeis" },
   { id: "desmontar", label: "Precisa desmontar/montar" },
   { id: "sem-vaga", label: "Sem vaga para caminhão" },
-  { id: "predio-alto", label: "Prédio alto (>5° andar)" },
   { id: "outros-cond", label: "Outros" },
 ];
 
@@ -133,7 +130,13 @@ const STEPS = ["Origem & Destino", "Itens", "Detalhes", "Contato"];
 
 type FormState = {
   originCity: string; originNeighborhood: string;
+  originPropertyType: "" | "casa" | "apartamento";
+  originFloor: string;
+  originHasElevator: "" | "sim" | "nao";
   destCity: string; destNeighborhood: string;
+  destPropertyType: "" | "casa" | "apartamento";
+  destFloor: string;
+  destHasElevator: "" | "sim" | "nao";
   items: Record<string, number>;
   itemsOtherText: string;
   date: Date | undefined; period: string;
@@ -146,7 +149,9 @@ type FormState = {
 
 const initial: FormState = {
   originCity: "", originNeighborhood: "",
+  originPropertyType: "", originFloor: "", originHasElevator: "",
   destCity: "", destNeighborhood: "",
+  destPropertyType: "", destFloor: "", destHasElevator: "",
   items: {}, itemsOtherText: "",
   date: undefined, period: "",
   needsHelpers: false,
@@ -457,6 +462,78 @@ export function QuoteStepper() {
                     onChange={(v) => update(neighborhoodKey, v)}
                   />
                 </div>
+                {(() => {
+                  const propKey = (b.k === "origin" ? "originPropertyType" : "destPropertyType") as
+                    "originPropertyType" | "destPropertyType";
+                  const floorKey = (b.k === "origin" ? "originFloor" : "destFloor") as
+                    "originFloor" | "destFloor";
+                  const elevKey = (b.k === "origin" ? "originHasElevator" : "destHasElevator") as
+                    "originHasElevator" | "destHasElevator";
+                  const prop = data[propKey];
+                  return (
+                    <div className="space-y-2">
+                      <Label className="text-xs">Tipo de imóvel</Label>
+                      <div className="grid grid-cols-2 gap-2">
+                        {[
+                          { id: "casa", label: "Casa" },
+                          { id: "apartamento", label: "Apartamento" },
+                        ].map((opt) => (
+                          <button
+                            key={opt.id}
+                            type="button"
+                            onClick={() => update(propKey, opt.id as any)}
+                            className={cn(
+                              "py-2 rounded-lg border-2 text-xs font-bold transition-all",
+                              prop === opt.id
+                                ? "border-primary bg-primary text-black shadow-glow"
+                                : "border-white/40 bg-background hover:border-primary/50"
+                            )}
+                          >
+                            {opt.label}
+                          </button>
+                        ))}
+                      </div>
+                      {prop === "apartamento" && (
+                        <div className="space-y-2 pt-1">
+                          <div>
+                            <Label className="text-xs">Andar</Label>
+                            <Input
+                              className="mt-1"
+                              type="number"
+                              min={1}
+                              placeholder="Ex: 3"
+                              value={data[floorKey]}
+                              onChange={(e) => update(floorKey, e.target.value)}
+                            />
+                          </div>
+                          <div>
+                            <Label className="text-xs">Tem elevador?</Label>
+                            <div className="grid grid-cols-2 gap-2 mt-1">
+                              {[
+                                { id: "sim", label: "Sim" },
+                                { id: "nao", label: "Não" },
+                              ].map((opt) => (
+                                <button
+                                  key={opt.id}
+                                  type="button"
+                                  onClick={() => update(elevKey, opt.id as any)}
+                                  className={cn(
+                                    "py-2 rounded-lg border-2 text-xs font-bold transition-all",
+                                    data[elevKey] === opt.id
+                                      ? "border-primary bg-primary text-black shadow-glow"
+                                      : "border-white/40 bg-background hover:border-primary/50"
+                                  )}
+                                >
+                                  {opt.label}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
               </div>
               );
             })}
@@ -501,14 +578,18 @@ export function QuoteStepper() {
                   key={id}
                   data-selected={selected ? "true" : "false"}
                   className={cn(
-                    "item-card rounded-lg p-3 flex flex-col items-center justify-between gap-1.5 transition-all bg-black min-w-0 w-full overflow-hidden"
+                    "item-card select-none rounded-lg p-3 flex flex-col items-center justify-between gap-1.5 transition-all bg-black min-w-0 w-full overflow-hidden"
                   )}
-                  style={{ maxHeight: 140, minHeight: 130 }}
+                  style={{ maxHeight: 140, minHeight: 130, userSelect: "none", WebkitUserSelect: "none" }}
+                  onMouseDown={(e) => {
+                    // Prevent text selection on rapid taps/clicks
+                    if ((e.target as HTMLElement).tagName !== "BUTTON") e.preventDefault();
+                  }}
                 >
-                  <Icon className={cn("w-6 h-6 shrink-0", selected ? "text-primary" : "text-muted-foreground")} />
+                  <Icon className={cn("w-6 h-6 shrink-0 pointer-events-none", selected ? "text-primary" : "text-muted-foreground")} />
                   <span
-                    className="font-semibold text-center leading-tight text-foreground"
-                    style={{ fontSize: "1.125rem", lineHeight: 1.15 }}
+                    className="font-semibold text-center leading-tight text-foreground select-none pointer-events-none"
+                    style={{ fontSize: "1.125rem", lineHeight: 1.15, userSelect: "none", WebkitUserSelect: "none" }}
                   >
                     {label}
                   </span>
