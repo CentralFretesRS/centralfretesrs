@@ -1,5 +1,5 @@
 import { ArrowRight } from "lucide-react";
-import fleetImg from "@/assets/section-fleet.jpg";
+import fleetImg from "@/assets/hero-van.jpg";
 import sharedImg from "@/assets/section-shared.jpg";
 import waImg from "@/assets/section-whatsapp.jpg";
 import rsImg from "@/assets/section-rs.jpg";
