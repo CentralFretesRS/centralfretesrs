@@ -578,12 +578,18 @@ export function QuoteStepper() {
                   key={id}
                   data-selected={selected ? "true" : "false"}
                   className={cn(
-                    "item-card select-none rounded-lg p-3 flex flex-col items-center justify-between gap-1.5 transition-all bg-black min-w-0 w-full overflow-hidden"
+                    "item-card select-none rounded-lg p-3 flex flex-col items-center justify-between gap-1.5 transition-all bg-black min-w-0 w-full overflow-hidden",
+                    !selected && "cursor-pointer"
                   )}
                   style={{ maxHeight: 140, minHeight: 130, userSelect: "none", WebkitUserSelect: "none" }}
                   onMouseDown={(e) => {
                     // Prevent text selection on rapid taps/clicks
                     if ((e.target as HTMLElement).tagName !== "BUTTON") e.preventDefault();
+                  }}
+                  onClick={(e) => {
+                    if (selected) return;
+                    if ((e.target as HTMLElement).closest("button")) return;
+                    incItem(id);
                   }}
                 >
                   <Icon className={cn("w-6 h-6 shrink-0 pointer-events-none", selected ? "text-primary" : "text-muted-foreground")} />
