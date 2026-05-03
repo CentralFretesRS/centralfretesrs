@@ -120,12 +120,9 @@ const PERIODS = [
 ];
 
 const CONDITIONS = [
-  { id: "escada", label: "Tem escada" },
-  { id: "elevador", label: "Tem elevador" },
   { id: "fragil", label: "Itens frágeis" },
   { id: "desmontar", label: "Precisa desmontar/montar" },
   { id: "sem-vaga", label: "Sem vaga para caminhão" },
-  { id: "predio-alto", label: "Prédio alto (>5° andar)" },
   { id: "outros-cond", label: "Outros" },
 ];
 
@@ -133,7 +130,13 @@ const STEPS = ["Origem & Destino", "Itens", "Detalhes", "Contato"];
 
 type FormState = {
   originCity: string; originNeighborhood: string;
+  originPropertyType: "" | "casa" | "apartamento";
+  originFloor: string;
+  originHasElevator: "" | "sim" | "nao";
   destCity: string; destNeighborhood: string;
+  destPropertyType: "" | "casa" | "apartamento";
+  destFloor: string;
+  destHasElevator: "" | "sim" | "nao";
   items: Record<string, number>;
   itemsOtherText: string;
   date: Date | undefined; period: string;
@@ -146,7 +149,9 @@ type FormState = {
 
 const initial: FormState = {
   originCity: "", originNeighborhood: "",
+  originPropertyType: "", originFloor: "", originHasElevator: "",
   destCity: "", destNeighborhood: "",
+  destPropertyType: "", destFloor: "", destHasElevator: "",
   items: {}, itemsOtherText: "",
   date: undefined, period: "",
   needsHelpers: false,
