@@ -6,7 +6,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 backdrop-blur-xl bg-background/70 border-b border-border">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <Link to="/"><Logo size={90} /></Link>
+        <Link to="/"><Logo size={135} /></Link>
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
           <a href="#servicos" className="hover:text-primary transition-colors">Serviços</a>
           <a href="#como-funciona" className="hover:text-primary transition-colors">Como Funciona</a>
