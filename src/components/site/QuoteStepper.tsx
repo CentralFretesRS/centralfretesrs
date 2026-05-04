@@ -547,7 +547,12 @@ export function QuoteStepper() {
                                     "py-2 rounded-lg border-2 text-xs font-bold transition-all",
                                     data[elevKey] === opt.id
                                       ? "border-primary bg-primary text-black shadow-glow"
-                                      : "border-white/40 bg-background hover:border-primary/50"
+                                      : cn(
+                                          "bg-background hover:border-primary/50",
+                                          attempted && !data[elevKey]
+                                            ? "border-destructive"
+                                            : "border-white/40"
+                                        )
                                   )}
                                 >
                                   {opt.label}
