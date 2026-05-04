@@ -37,7 +37,7 @@ export function Footer() {
       <div className="container mx-auto px-4 py-12">
         <div className="grid md:grid-cols-3 gap-8 items-start">
           <div>
-            <Logo size={36} />
+            <Logo size={135} />
             <p className="text-sm text-muted-foreground mt-4">{COMPANY_CITY}</p>
           </div>
           <div>
