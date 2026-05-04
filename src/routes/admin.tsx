@@ -55,7 +55,7 @@ function AdminPage() {
     <div className="min-h-screen">
       <header className="sticky top-0 z-30 backdrop-blur-xl bg-background/80 border-b border-border">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <Logo size={32} />
+          <Logo size={135} />
           <div className="flex items-center gap-2">
             <Button variant="outline" size="sm" onClick={enableNotif}>
               {notif ? <Bell className="w-4 h-4 mr-1 text-success" /> : <BellOff className="w-4 h-4 mr-1" />}
