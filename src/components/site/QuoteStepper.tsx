@@ -864,7 +864,7 @@ export function QuoteStepper() {
             <Input
               className={cn(
                 "mt-1",
-                attempted && data.whatsapp.replace(/\D/g, "").length < 10 && "!border-destructive"
+                data.whatsapp.replace(/\D/g, "").length < 10 && "!border-destructive"
               )}
               placeholder="(51) 99999-9999"
               value={data.whatsapp}
@@ -889,7 +889,7 @@ export function QuoteStepper() {
           </Button>
         ) : (
           <Button className="bg-gradient-brand text-white font-bold shadow-glow disabled:opacity-50"
-            disabled={submitting}
+            disabled={submitting || !canNext()}
             onClick={() => { if (!canNext()) { setAttempted(true); return; } submit(); }}>
             <Send className="w-4 h-4 mr-2" /> {submitting ? "Enviando..." : "SOLICITAR COTAÇÃO"}
           </Button>
