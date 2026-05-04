@@ -294,8 +294,8 @@ export function QuoteStepper() {
   const canNext = () => {
     if (step === 0) {
       if (!data.originCity || !data.destCity) return false;
-      if (data.originPropertyType === "apartamento" && !data.originFloor) return false;
-      if (data.destPropertyType === "apartamento" && !data.destFloor) return false;
+      if (data.originPropertyType === "apartamento" && (!data.originFloor || !data.originHasElevator)) return false;
+      if (data.destPropertyType === "apartamento" && (!data.destFloor || !data.destHasElevator)) return false;
       return true;
     }
     if (step === 1) return itemsCount > 0;
@@ -547,7 +547,12 @@ export function QuoteStepper() {
                                     "py-2 rounded-lg border-2 text-xs font-bold transition-all",
                                     data[elevKey] === opt.id
                                       ? "border-primary bg-primary text-black shadow-glow"
-                                      : "border-white/40 bg-background hover:border-primary/50"
+                                      : cn(
+                                          "bg-background hover:border-primary/50",
+                                          attempted && !data[elevKey]
+                                            ? "border-destructive"
+                                            : "border-white/40"
+                                        )
                                   )}
                                 >
                                   {opt.label}
