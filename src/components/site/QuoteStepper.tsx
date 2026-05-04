@@ -294,8 +294,8 @@ export function QuoteStepper() {
   const canNext = () => {
     if (step === 0) {
       if (!data.originCity || !data.destCity) return false;
-      if (data.originPropertyType === "apartamento" && !data.originFloor) return false;
-      if (data.destPropertyType === "apartamento" && !data.destFloor) return false;
+      if (data.originPropertyType === "apartamento" && (!data.originFloor || !data.originHasElevator)) return false;
+      if (data.destPropertyType === "apartamento" && (!data.destFloor || !data.destHasElevator)) return false;
       return true;
     }
     if (step === 1) return itemsCount > 0;
