@@ -97,14 +97,14 @@
 
 @layer base {
   * { border-color: var(--color-border); }
-  html, body { background: #000000 !important; color: var(--foreground); overflow-x: hidden; max-width: 100vw; }
+  html, body, #root { background: #000000 !important; color: var(--foreground); overflow-x: hidden; max-width: 100vw; min-height: 100dvh; }
   html { scroll-behavior: smooth; }
   body {
     font-family: var(--font-sans);
     background-color: #000000 !important;
     background-image: none !important;
     background-attachment: fixed;
-    min-height: 100vh;
+    min-height: 100dvh;
     font-size: 1.2em;
   }
   h1, h2, h3, h4, .font-display {
