@@ -252,6 +252,7 @@ export function QuoteStepper() {
   const [datePickerOpen, setDatePickerOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
+  const [attempted, setAttempted] = useState(false);
 
   const update = <K extends keyof FormState>(k: K, v: FormState[K]) =>
     setData((d) => ({ ...d, [k]: v }));
@@ -291,11 +292,22 @@ export function QuoteStepper() {
   );
 
   const canNext = () => {
-    if (step === 0) return data.originCity && data.destCity;
+    if (step === 0) {
+      if (!data.originCity || !data.destCity) return false;
+      if (data.originPropertyType === "apartamento" && !data.originFloor) return false;
+      if (data.destPropertyType === "apartamento" && !data.destFloor) return false;
+      return true;
+    }
     if (step === 1) return itemsCount > 0;
     if (step === 2) return !!data.date && !!data.period;
     if (step === 3) return data.name.trim().length > 1 && data.whatsapp.replace(/\D/g, "").length >= 10;
     return false;
+  };
+
+  const tryNext = () => {
+    if (!canNext()) { setAttempted(true); return; }
+    setAttempted(false);
+    setStep((s) => s + 1);
   };
 
   const itemsListText = () => {
@@ -496,15 +508,29 @@ export function QuoteStepper() {
                       {prop === "apartamento" && (
                         <div className="space-y-2 pt-1">
                           <div>
-                            <Label className="text-xs">Andar</Label>
-                            <Input
-                              className="mt-1"
-                              type="number"
-                              min={1}
-                              placeholder="Ex: 3"
-                              value={data[floorKey]}
-                              onChange={(e) => update(floorKey, e.target.value)}
-                            />
+                            <Label className="text-xs">Andar *</Label>
+                            <div className="grid grid-cols-5 gap-1.5 mt-1">
+                              {["1","2","3","4","5+"].map((opt) => (
+                                <button
+                                  key={opt}
+                                  type="button"
+                                  onClick={() => update(floorKey, opt)}
+                                  className={cn(
+                                    "py-2 rounded-lg border-2 text-xs font-bold transition-all",
+                                    data[floorKey] === opt
+                                      ? "border-primary bg-primary text-black shadow-glow"
+                                      : cn(
+                                          "bg-background hover:border-primary/50",
+                                          attempted && !data[floorKey]
+                                            ? "border-destructive"
+                                            : "border-white/40"
+                                        )
+                                  )}
+                                >
+                                  {opt}
+                                </button>
+                              ))}
+                            </div>
                           </div>
                           <div>
                             <Label className="text-xs">Tem elevador?</Label>
@@ -827,12 +853,23 @@ export function QuoteStepper() {
           </h3>
           <div>
             <Label className="text-xs">Nome *</Label>
-            <Input className="mt-1" value={data.name} onChange={(e) => update("name", e.target.value)} />
+            <Input
+              className={cn("mt-1", attempted && data.name.trim().length <= 1 && "!border-destructive")}
+              value={data.name}
+              onChange={(e) => update("name", e.target.value)}
+            />
           </div>
           <div>
             <Label className="text-xs">WhatsApp *</Label>
-            <Input className="mt-1" placeholder="(51) 99999-9999" value={data.whatsapp}
-              onChange={(e) => update("whatsapp", e.target.value)} />
+            <Input
+              className={cn(
+                "mt-1",
+                attempted && data.whatsapp.replace(/\D/g, "").length < 10 && "!border-destructive"
+              )}
+              placeholder="(51) 99999-9999"
+              value={data.whatsapp}
+              onChange={(e) => update("whatsapp", e.target.value)}
+            />
           </div>
           <Alert>
             ⚠️ Quanto mais preciso você for, mais precisa será sua cotação.
@@ -846,13 +883,14 @@ export function QuoteStepper() {
           <ArrowLeft className="w-4 h-4 mr-1" /> Voltar
         </Button>
         {step < STEPS.length - 1 ? (
-          <Button className="bg-gradient-brand text-white font-bold shadow-glow disabled:opacity-50"
-            disabled={!canNext()} onClick={() => setStep((s) => s + 1)}>
+          <Button className="bg-gradient-brand text-white font-bold shadow-glow"
+            onClick={tryNext}>
             Próximo <ArrowRight className="w-4 h-4 ml-1" />
           </Button>
         ) : (
           <Button className="bg-gradient-brand text-white font-bold shadow-glow disabled:opacity-50"
-            disabled={!canNext() || submitting} onClick={submit}>
+            disabled={submitting}
+            onClick={() => { if (!canNext()) { setAttempted(true); return; } submit(); }}>
             <Send className="w-4 h-4 mr-2" /> {submitting ? "Enviando..." : "SOLICITAR COTAÇÃO"}
           </Button>
         )}
