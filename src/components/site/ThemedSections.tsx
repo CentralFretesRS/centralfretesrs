@@ -1,4 +1,6 @@
 import { ArrowRight } from "lucide-react";
+import { MessageCircle } from "lucide-react";
+import { WHATSAPP_NUMBER } from "@/lib/config";
 import fleetImg from "@/assets/hero-van.jpg";
 import sharedImg from "@/assets/section-shared.jpg";
 import waImg from "@/assets/section-whatsapp.jpg";
@@ -32,8 +34,8 @@ const sections: Section[] = [
   },
   {
     id: "whatsapp",
-    title: "100% WhatsApp",
-    text: "Descreva o que você precisa e logo nossa equipe entrará em contato com a melhor solução para você.",
+    title: "Atendimento via WhatsApp",
+    text: "O WhatsApp é exclusivo para dúvidas pós-cotação. Para solicitar seu frete, utilize o formulário acima — é mais rápido, organizado e você recebe a cotação diretamente no WhatsApp. Não realizamos atendimento por ligação. Todas as tratativas são registradas por escrito ou por áudio para sua segurança.",
     images: [
       { src: waImg, alt: "Atendimento ágil pelo WhatsApp" },
     ],
@@ -65,7 +67,7 @@ export function ThemedSections() {
               }`}
             >
               {/* Illustration */}
-              <div className="grid grid-cols-1 gap-4">
+              <div className="grid grid-cols-1 gap-4 relative">
                 {s.images.map((img) => (
                   <div
                     key={img.src}
@@ -81,6 +83,18 @@ export function ThemedSections() {
                     />
                   </div>
                 ))}
+                {s.id === "whatsapp" && (
+                  <a
+                    href={`https://wa.me/${WHATSAPP_NUMBER}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="Abrir WhatsApp"
+                    className="absolute -bottom-5 -right-3 sm:bottom-6 sm:right-6 inline-flex items-center gap-2 px-5 py-3 rounded-full bg-[oklch(0.70_0.18_145)] text-white font-display font-bold uppercase tracking-wide shadow-glow hover:scale-105 transition-transform"
+                  >
+                    <MessageCircle className="w-5 h-5" fill="currentColor" />
+                    Falar no WhatsApp
+                  </a>
+                )}
               </div>
 
               {/* Text */}
@@ -92,13 +106,15 @@ export function ThemedSections() {
                   <span className="text-gradient-brand">{s.title}</span>
                 </h2>
                 <p className="text-lg text-muted-foreground max-w-xl">{s.text}</p>
-                <a
-                  href="#cotacao"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#FF8C00] text-white font-display text-base font-bold uppercase tracking-wide shadow-glow hover:brightness-110 transition-all"
-                >
-                  Solicitar Cotação
-                  <ArrowRight className="w-5 h-5" />
-                </a>
+                {s.id !== "whatsapp" && (
+                  <a
+                    href="#cotacao"
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#FF8C00] text-white font-display text-base font-bold uppercase tracking-wide shadow-glow hover:brightness-110 transition-all"
+                  >
+                    Solicitar Cotação
+                    <ArrowRight className="w-5 h-5" />
+                  </a>
+                )}
               </div>
             </div>
           </div>
