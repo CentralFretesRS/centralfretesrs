@@ -1,6 +1,5 @@
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
-import { WhatsAppFloat } from "@/components/site/WhatsAppFloat";
 import { QuoteStepper } from "@/components/site/QuoteStepper";
 import { HowItWorks, Services } from "@/components/site/Sections";
 import { ThemedSections } from "@/components/site/ThemedSections";
@@ -113,7 +112,6 @@ export default function Index() {
         <Services />
       </main>
       <Footer />
-      <WhatsAppFloat />
     </div>
   );
 }
