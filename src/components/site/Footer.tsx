@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "react-router-dom";
 import { Settings, Instagram, Facebook, MessageCircle } from "lucide-react";
 import { Logo } from "./Logo";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -29,7 +29,7 @@ export function Footer() {
     }
     setLoading(false);
     setOpen(false);
-    navigate({ to: "/admin" });
+    navigate("/admin");
   };
 
   return (

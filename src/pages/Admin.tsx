@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Logo } from "@/components/site/Logo";
 import { Button } from "@/components/ui/button";
@@ -9,24 +9,20 @@ import { Financial } from "@/components/admin/Financial";
 import { LogOut, Bell, BellOff } from "lucide-react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/admin")({
-  head: () => ({ meta: [{ title: "Painel — Central Fretes RS" }, { name: "robots", content: "noindex" }] }),
-  component: AdminPage,
-});
-
-function AdminPage() {
+export default function Admin() {
   const navigate = useNavigate();
   const [ready, setReady] = useState(false);
   const [notif, setNotif] = useState(typeof Notification !== "undefined" && Notification.permission === "granted");
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
+    document.title = "Painel — Central Fretes RS";
     supabase.auth.getSession().then(({ data }) => {
-      if (!data.session) { navigate({ to: "/" }); return; }
+      if (!data.session) { navigate("/"); return; }
       setReady(true);
     });
     const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-      if (!session) navigate({ to: "/" });
+      if (!session) navigate("/");
     });
     return () => { sub.subscription.unsubscribe(); };
   }, [navigate]);

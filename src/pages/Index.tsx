@@ -1,4 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { WhatsAppFloat } from "@/components/site/WhatsAppFloat";
@@ -6,32 +5,18 @@ import { QuoteStepper } from "@/components/site/QuoteStepper";
 import { HowItWorks, Services } from "@/components/site/Sections";
 import { ThemedSections } from "@/components/site/ThemedSections";
 import { Zap } from "lucide-react";
+import { useEffect } from "react";
 import { COMPANY_TAGLINE } from "@/lib/config";
 
 const SERVED_CITIES = [
-  // Grande Porto Alegre
   "Porto Alegre", "Canoas", "Novo Hamburgo", "São Leopoldo", "Gravataí",
   "Viamão", "Alvorada", "Cachoeirinha", "Esteio", "Sapucaia do Sul", "Guaíba",
-  // Litoral
   "Tramandaí", "Imbé", "Capão da Canoa", "Torres", "Osório", "Cidreira",
   "Balneário Pinhal", "Xangri-lá",
-  // Serra
   "Caxias do Sul", "Bento Gonçalves", "Gramado", "Canela",
-  // Interior
   "Santa Maria", "Passo Fundo", "Pelotas", "Rio Grande", "Uruguaiana",
   "Bagé", "Santa Cruz do Sul",
 ];
-
-const KEYWORDS = [
-  "frete Canoas", "mudança Canoas", "frete Porto Alegre", "mudança Porto Alegre",
-  "frete litoral RS", "frete interior RS", "fretes compartilhados RS",
-  "mudança residencial RS", "frete barato RS",
-  ...SERVED_CITIES.flatMap((c) => [
-    `frete ${c}`,
-    `mudança ${c}`,
-    `fretes compartilhados ${c}`,
-  ]),
-].join(", ");
 
 const localBusinessJsonLd = {
   "@context": "https://schema.org",
@@ -76,35 +61,25 @@ const servicesJsonLd = {
   })),
 };
 
-export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Central Fretes RS — Frete e Mudança em Canoas Porto Alegre Litoral e todo o RS" },
-      { name: "description", content: "Solicite seu frete ou mudança em segundos. Atendemos Canoas, Porto Alegre, litoral e interior do RS. Orçamento grátis pelo WhatsApp!" },
-      { name: "keywords", content: KEYWORDS },
-      { property: "og:title", content: "Central Fretes RS — Frete e Mudança em Canoas Porto Alegre Litoral e todo o RS" },
-      { property: "og:description", content: "Solicite seu frete ou mudança em segundos. Atendemos Canoas, Porto Alegre, litoral e interior do RS. Orçamento grátis pelo WhatsApp!" },
-    ],
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify(localBusinessJsonLd),
-      },
-      {
-        type: "application/ld+json",
-        children: JSON.stringify(servicesJsonLd),
-      },
-    ],
-  }),
-  component: Index,
-});
+export default function Index() {
+  useEffect(() => {
+    const ids = ["ld-local", "ld-services"];
+    const data = [localBusinessJsonLd, servicesJsonLd];
+    const els = ids.map((id, i) => {
+      const s = document.createElement("script");
+      s.type = "application/ld+json";
+      s.id = id;
+      s.text = JSON.stringify(data[i]);
+      document.head.appendChild(s);
+      return s;
+    });
+    return () => { els.forEach((s) => s.remove()); };
+  }, []);
 
-function Index() {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
       <main className="flex-1 bg-background">
-        {/* HERO */}
         <section id="cotacao" className="relative overflow-hidden bg-background">
           <div className="container mx-auto px-4 pt-12 pb-16 relative">
             <div className="grid lg:grid-cols-2 gap-10 items-center min-w-0">
