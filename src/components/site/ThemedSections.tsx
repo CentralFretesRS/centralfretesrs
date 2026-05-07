@@ -89,11 +89,10 @@ export function ThemedSections() {
                     target="_blank"
                     rel="noreferrer"
                     aria-label="Abrir WhatsApp"
-                    className="absolute bottom-4 right-4 sm:bottom-8 sm:right-8 inline-flex items-center gap-3 pl-2 pr-6 py-2 rounded-full bg-[#25D366] text-white font-display font-bold uppercase tracking-wide text-base sm:text-lg shadow-2xl hover:scale-105 transition-transform"
+                    style={{ left: "10%", top: "70%", width: "32%" }}
+                    className="absolute inline-flex items-center justify-center gap-2 py-3 rounded-full bg-[#25D366] text-white font-display font-bold uppercase tracking-wide text-[clamp(0.7rem,1.4vw,1rem)] shadow-2xl hover:scale-[1.03] transition-transform"
                   >
-                    <span className="w-10 h-10 rounded-full bg-white flex items-center justify-center">
-                      <MessageCircle className="w-6 h-6 text-[#25D366]" fill="currentColor" />
-                    </span>
+                    <MessageCircle className="w-5 h-5" fill="currentColor" />
                     Falar no WhatsApp
                   </a>
                 )}
