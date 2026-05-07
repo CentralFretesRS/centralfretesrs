@@ -35,11 +35,9 @@ export function HowItWorks() {
 export function Services() {
   const items = [
     { Icon: Package, name: "Pequenos Fretes", desc: "Itens avulsos, encomendas e entregas rápidas" },
-    { Icon: Home, name: "Mudanças Residenciais", desc: "Transporte completo com segurança" },
-    { Icon: Sofa, name: "Transporte de Móveis", desc: "Cuidado especial com seus móveis" },
+    { Icon: Home, name: "Mudanças & Transporte de Móveis", desc: "Mudanças residenciais completas com cuidado especial em cada móvel." },
     { Icon: Building2, name: "Comercial / Empresarial", desc: "Soluções para empresas e escritórios" },
-    { Icon: Waves, name: "Litoral", desc: "Fretes para o litoral gaúcho" },
-    { Icon: Truck, name: "Compartilhados", desc: "Divida o frete e economize" },
+    { Icon: Waves, name: "Litoral e Compartilhados", desc: "Fretes compartilhados para o litoral do RS e SC. Compartilhe o frete e economize." },
     { Icon: MapPin, name: "Interior do RS", desc: "Atendemos todo o estado" },
   ];
   return (
