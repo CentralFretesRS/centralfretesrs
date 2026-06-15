@@ -3,6 +3,7 @@ import { Footer } from "@/components/site/Footer";
 import { QuoteStepper } from "@/components/site/QuoteStepper";
 import { HowItWorks, Services } from "@/components/site/Sections";
 import { ThemedSections } from "@/components/site/ThemedSections";
+import { ServiceAreas } from "@/components/site/ServiceAreas";
 import { Zap } from "lucide-react";
 import { useEffect } from "react";
 import { COMPANY_TAGLINE } from "@/lib/config";
@@ -108,6 +109,7 @@ export default function Index() {
         </section>
 
         <HowItWorks />
+        <ServiceAreas />
         <ThemedSections />
         <Services />
       </main>

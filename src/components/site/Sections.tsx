@@ -39,6 +39,8 @@ export function Services() {
     { Icon: Building2, name: "Comercial / Empresarial", desc: "Soluções para empresas e escritórios" },
     { Icon: Waves, name: "Litoral e Compartilhados", desc: "Fretes compartilhados para o litoral do RS e SC. Compartilhe o frete e economize." },
     { Icon: MapPin, name: "Interior do RS", desc: "Atendemos todo o estado" },
+    { Icon: Package, name: "Fretes Pequenos", desc: "Ideal para volumes pequenos. Cobrança proporcional ao tamanho da carga." },
+    { Icon: Truck, name: "Fretes Compartilhados", desc: "Divida o custo do frete com outras cargas no mesmo trajeto e economize." },
   ];
   return (
     <section id="servicos" className="py-20 border-t border-border/40">
